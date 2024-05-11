@@ -1,105 +1,161 @@
-
 console.log('Hello from sample.js');
 
 class Ball {
     constructor(element) {
         this.element = element;
-        this.x = 0;
-        this.y = 0;
-        this.dx = 10;
-        this.dy = 10;
+        this.x = 100; // Starting x-position
+        this.y = 100; // Starting y-position
+        this.dx = 5; // Movement in x
+        this.dy = 5; // Movement in y
         this.radius = 10;
     }
+
     move() {
-        // console.log(`x: ${this.x}, y: ${this.y}`);
         this.x += this.dx;
         this.y += this.dy;
-        this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`;
+        this.element.css({ // Use jQuery to set CSS properties
+            left: `${this.x}px`,
+            top: `${this.y}px`
+        });
     }
 }
+
 class Paddle {
     constructor(element) {
-        this.e = $(element);
-        const offset = this.e.offset();
-
+        this.element = $(element);
+        const offset = this.element.offset();
         this.x = offset.left;
-        this.y = offset.top;
-
-        this.width = this.e.width();
-        this.height = this.e.height();
-        this.mouseMoveHandler = this.mouseMove.bind(this);
-        window.addEventListener('mousemove', this.mouseMoveHandler);
+        this.width = this.element.width();
+        this.height = 10; // Fixed height
+        $(window).on('mousemove', e => this.mouseMove(e));
     }
 
     mouseMove(e) {
-        // 마우스의 x 좌표를 패들의 x 좌표로 설정
-        this.x = e.pageX;
-        this.e.css('left', `${e.pageX}px`); // jQuery로 스타일 변경
+        this.x = e.clientX - this.width / 2;
+        this.element.css('left', `${this.x}px`);
     }
 }
+
+class Brick {
+    constructor(x, y, width, height, element) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.element = element;
+        this.element.css({left: `${x}px`, top: `${y}px`, width: `${width}px`, height: `${height}px`});
+        this.isDestroyed = false;
+    }
+}
+
 class GameContainer {
     constructor(element) {
-        this.e = $(element);
-        const offset = this.e.offset();
-
+        this.element = $(element);
+        const offset = this.element.offset();
         this.x = offset.left;
         this.y = offset.top;
-
-        this.width = this.e.width();
-        this.height = this.e.height();
+        this.width = this.element.width();
+        this.height = this.element.height();
     }
 }
 
-class BallCollisionChecker {
-    constructor(ball) {
+class CollisionManager {
+    constructor(ball, paddle, bricks, gameContainer, scoreDisplay) {
         this.ball = ball;
+        this.paddle = paddle;
+        this.bricks = bricks;
+        this.gameContainer = gameContainer;
+        this.score = 0;
+        this.scoreDisplay = scoreDisplay;
+        this.stop = false;
     }
-    checkObjects(objArray) {
-        for (let obj of objArray) {
-            if (this.ball.x + this.ball.radius > obj.x && this.ball.x - this.ball.radius < obj.x + obj.width && this.ball.y + this.ball.radius > obj.y && this.ball.y - this.ball.radius < obj.y + obj.height) {
-                this.ball.dx *= -1;
+
+    checkCollisions() {
+        this.checkContainerBounds();
+        this.checkPaddleCollision();
+        this.checkBrickCollisions();
+    }
+
+    checkContainerBounds() {
+        if (this.ball.x < this.gameContainer.x || this.ball.x > this.gameContainer.x + this.gameContainer.width) {
+            this.ball.dx *= -1;
+        }
+        if (this.ball.y < this.gameContainer.y) {
+            this.ball.dy *= -1;
+        }
+        if (this.ball.y > this.gameContainer.y + this.gameContainer.height) {
+            console.log('Game Over!'); // Simple game over alert
+            this.stop = true;
+        }
+    }
+
+    checkPaddleCollision() {
+        var paddleTop = this.paddle.element.offset().top;
+        var paddleLeft = this.paddle.element.offset().left;
+        var paddleRight = paddleLeft + this.paddle.width;
+
+        var ballBottom = this.ball.y + this.ball.radius;
+        var ballLeft = this.ball.x - this.ball.radius;
+        var ballRight = this.ball.x + this.ball.radius;
+
+        if (ballBottom > paddleTop && this.ball.y < paddleTop && ballRight > paddleLeft && ballLeft < paddleRight) {
+            this.ball.dy *= -1;
+        }
+
+        
+    }
+    
+
+
+    checkBrickCollisions() {
+        this.bricks.forEach(brick => {
+            if (!brick.isDestroyed && this.ball.x + this.ball.radius > brick.x && this.ball.x - this.ball.radius < brick.x + brick.width && this.ball.y + this.ball.radius > brick.y && this.ball.y - this.ball.radius < brick.y + brick.height) {
                 this.ball.dy *= -1;
+                brick.element.hide(); // Hide the brick element
+                brick.isDestroyed = true;
+                this.score += 10;
+                this.scoreDisplay.text(`Score: ${this.score}`);
             }
-        }
-    }
-    checkPaddle(paddle) {
-        if (this.ball.x + this.ball.radius > paddle.x && this.ball.x - this.ball.radius < paddle.x + paddle.width && this.ball.y + this.ball.radius > paddle.y && this.ball.y - this.ball.radius < paddle.y + paddle.height) {
-            this.ball.dx *= -1;
-            this.ball.dy *= -1;
-        }
-    }
-    checkContainer(container) {
-        if (this.ball.x < container.x || this.ball.x > container.x + container.width) {
-            this.ball.dx *= -1;
-        }
-        if (this.ball.y < container.y || this.ball.y > container.y + container.height) {
-            this.ball.dy *= -1;
-        }
+        });
     }
 }
-$(window).on('load', function() {
-    const ball = new Ball(document.querySelector('#ball'));
-    const paddle = new Paddle('#paddle');
-    const container = new GameContainer('#gameContainer');
-    const ballCollisionChecker = new BallCollisionChecker(ball);
-    let isPaused = false;
 
-    $(window).on('keydown', function(e) {
-        console.log(e.key);
-        if (e.key === ' ') { // 스페이스바를 눌렀을 때
-            isPaused = !isPaused; // 일시정지 상태를 토글
+// On window load, setup the game
+$(window).on('load', function() {
+    const ballElement = $('#ball');
+    const paddleElement = $('#paddle');
+    const gameContainerElement = $('#gameContainer');
+    const scoreDisplay = $('#score');
+
+    const ball = new Ball(ballElement);
+    const paddle = new Paddle(paddleElement);
+    const gameContainer = new GameContainer(gameContainerElement);
+
+    // Setup bricks
+    const bricks = [];
+    for (let i = 0; i < 5; i++) { // 5 rows of bricks
+        for (let j = 0; j < 10; j++) { // 10 bricks per row
+            let brickElement = $('<div class="brick"></div>').appendTo(gameContainerElement);
+            bricks.push(new Brick(j * 52+300, i * 30+300, 50, 20, brickElement));
         }
-    });
+    }
+
+    const collisionManager = new CollisionManager(ball, paddle, bricks, gameContainer, scoreDisplay);
 
     requestAnimationFrame(function gameLoop() {
-        if (!isPaused) { // 게임이 일시정지 상태가 아니라면
-            ballCollisionChecker.checkContainer(container);
-            ballCollisionChecker.checkPaddle(paddle);
-            ball.move();
-        }      
+        if (collisionManager.stop) {
+            return;
+        }
+        ball.move();
+        collisionManager.checkCollisions();
         requestAnimationFrame(gameLoop);
     });
+    // animation = setInterval(function gameloop1(){
+    //     if (collisionManager.stop) {
+    //         return;
+    //     }
+    //     ball.move();
+    //     collisionManager.checkCollisions();
+    // }, 100);
+
 });
-
-
