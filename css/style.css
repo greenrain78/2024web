@@ -1,32 +1,9 @@
-#gameContainer {
-    width: 500px;
-    height: 400px;
-    border: 2px solid black;
-    position: relative;
-    overflow: hidden;
-}
-
-#ball {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 50%;
-    position: absolute;
-}
-
-#paddle {
-    width: 80px;
-    height: 20px;
-    background-color: blue;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.brick {
-    width: 50px;
-    height: 20px;
-    background-color: green;
-    position: absolute;
+* { 
+    padding: 0; 
+    margin: 0; 
+} 
+canvas { 
+    background: #eee; 
+    display: block; 
+    margin: 0 auto; 
 }

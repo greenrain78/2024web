@@ -1,161 +1,168 @@
-console.log('Hello from sample.js');
+$(document).ready(function() {
+  class Game {
+      constructor(canvasId) {
+          this.canvas = document.getElementById(canvasId);
+          this.ctx = this.canvas.getContext('2d');
+          this.ball = new Ball(this.canvas.width / 2, this.canvas.height - 30);
+          this.paddle = new Paddle((this.canvas.width - 75) / 2, this.canvas.height - 10);
+          this.bricks = [];
+          this.rows = 5;
+          this.columns = 8;
+          this.collisionManager = new CollisionManager(this.ball, this.paddle, this.bricks, this.canvas);
+          this.createBricks();
+          this.initMouseControl();
+          this.loop();
+      }
 
-class Ball {
-    constructor(element) {
-        this.element = element;
-        this.x = 100; // Starting x-position
-        this.y = 100; // Starting y-position
-        this.dx = 5; // Movement in x
-        this.dy = 5; // Movement in y
-        this.radius = 10;
-    }
+      createBricks() {
+          for (let r = 0; r < this.rows; r++) {
+              for (let c = 0; c < this.columns; c++) {
+                  this.bricks.push(new Brick(c * (75 + 10) + 30, r * (20 + 10) + 30));
+              }
+          }
+      }
 
-    move() {
-        this.x += this.dx;
-        this.y += this.dy;
-        this.element.css({ // Use jQuery to set CSS properties
-            left: `${this.x}px`,
-            top: `${this.y}px`
-        });
-    }
-}
+      initMouseControl() {
+          $(this.canvas).mousemove((event) => {
+              let relativeX = event.clientX - this.canvas.offsetLeft;
+              if (relativeX > 0 && relativeX < this.canvas.width) {
+                  this.paddle.x = relativeX - this.paddle.width / 2;
+              }
+          });
+      }
 
-class Paddle {
-    constructor(element) {
-        this.element = $(element);
-        const offset = this.element.offset();
-        this.x = offset.left;
-        this.width = this.element.width();
-        this.height = 10; // Fixed height
-        $(window).on('mousemove', e => this.mouseMove(e));
-    }
+      drawBricks() {
+          this.bricks.forEach(brick => {
+              if (brick.status === 1) {
+                  brick.draw(this.ctx);
+              }
+          });
+      }
 
-    mouseMove(e) {
-        this.x = e.clientX - this.width / 2;
-        this.element.css('left', `${this.x}px`);
-    }
-}
+      loop() {
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ball.draw(this.ctx);
+          this.paddle.draw(this.ctx);
+          this.drawBricks();
+          this.collisionManager.checkCollisions();
 
-class Brick {
-    constructor(x, y, width, height, element) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.element = element;
-        this.element.css({left: `${x}px`, top: `${y}px`, width: `${width}px`, height: `${height}px`});
-        this.isDestroyed = false;
-    }
-}
+          if (this.ball.y + this.ball.dy > this.canvas.height) {
+              alert("GAME OVER");
+              document.location.reload();
+              return;
+          }
 
-class GameContainer {
-    constructor(element) {
-        this.element = $(element);
-        const offset = this.element.offset();
-        this.x = offset.left;
-        this.y = offset.top;
-        this.width = this.element.width();
-        this.height = this.element.height();
-    }
-}
+          requestAnimationFrame(() => this.loop());
+      }
+  }
 
-class CollisionManager {
-    constructor(ball, paddle, bricks, gameContainer, scoreDisplay) {
-        this.ball = ball;
-        this.paddle = paddle;
-        this.bricks = bricks;
-        this.gameContainer = gameContainer;
-        this.score = 0;
-        this.scoreDisplay = scoreDisplay;
-        this.stop = false;
-    }
+  class Ball {
+      constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.dx = 8;
+          this.dy = -8;
+          this.radius = 10;
+      }
 
-    checkCollisions() {
-        this.checkContainerBounds();
-        this.checkPaddleCollision();
-        this.checkBrickCollisions();
-    }
+      draw(ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "#0095DD";
+          ctx.fill();
+          ctx.closePath();
+      }
 
-    checkContainerBounds() {
-        if (this.ball.x < this.gameContainer.x || this.ball.x > this.gameContainer.x + this.gameContainer.width) {
-            this.ball.dx *= -1;
-        }
-        if (this.ball.y < this.gameContainer.y) {
-            this.ball.dy *= -1;
-        }
-        if (this.ball.y > this.gameContainer.y + this.gameContainer.height) {
-            console.log('Game Over!'); // Simple game over alert
-            this.stop = true;
-        }
-    }
+      move() {
+          this.x += this.dx;
+          this.y += this.dy;
+      }
 
-    checkPaddleCollision() {
-        var paddleTop = this.paddle.element.offset().top;
-        var paddleLeft = this.paddle.element.offset().left;
-        var paddleRight = paddleLeft + this.paddle.width;
+      bounceX() {
+          this.dx = -this.dx;
+      }
 
-        var ballBottom = this.ball.y + this.ball.radius;
-        var ballLeft = this.ball.x - this.ball.radius;
-        var ballRight = this.ball.x + this.ball.radius;
+      bounceY() {
+          this.dy = -this.dy;
+      }
+  }
 
-        if (ballBottom > paddleTop && this.ball.y < paddleTop && ballRight > paddleLeft && ballLeft < paddleRight) {
-            this.ball.dy *= -1;
-        }
+  class Paddle {
+      constructor(x, y) {
+          this.width = 75;
+          this.height = 10;
+          this.x = x;
+          this.y = y;
+      }
 
-        
-    }
-    
+      draw(ctx) {
+          ctx.beginPath();
+          ctx.rect(this.x, this.y, this.width, this.height);
+          ctx.fillStyle = "#0095DD";
+          ctx.fill();
+          ctx.closePath();
+      }
+  }
 
+  class Brick {
+      constructor(x, y) {
+          this.width = 75;
+          this.height = 20;
+          this.x = x;
+          this.y = y;
+          this.status = 1;
+      }
 
-    checkBrickCollisions() {
-        this.bricks.forEach(brick => {
-            if (!brick.isDestroyed && this.ball.x + this.ball.radius > brick.x && this.ball.x - this.ball.radius < brick.x + brick.width && this.ball.y + this.ball.radius > brick.y && this.ball.y - this.ball.radius < brick.y + brick.height) {
-                this.ball.dy *= -1;
-                brick.element.hide(); // Hide the brick element
-                brick.isDestroyed = true;
-                this.score += 10;
-                this.scoreDisplay.text(`Score: ${this.score}`);
-            }
-        });
-    }
-}
+      draw(ctx) {
+          ctx.beginPath();
+          ctx.rect(this.x, this.y, this.width, this.height);
+          ctx.fillStyle = "#0095DD";
+          ctx.fill();
+          ctx.closePath();
+      }
+  }
 
-// On window load, setup the game
-$(window).on('load', function() {
-    const ballElement = $('#ball');
-    const paddleElement = $('#paddle');
-    const gameContainerElement = $('#gameContainer');
-    const scoreDisplay = $('#score');
+  class CollisionManager {
+      constructor(ball, paddle, bricks, canvas) {
+          this.ball = ball;
+          this.paddle = paddle;
+          this.bricks = bricks;
+          this.canvas = canvas;
+      }
 
-    const ball = new Ball(ballElement);
-    const paddle = new Paddle(paddleElement);
-    const gameContainer = new GameContainer(gameContainerElement);
+      checkCollisions() {
+          this.checkWallCollision();
+          this.checkPaddleCollision();
+          this.checkBrickCollisions();
+          this.ball.move();
+      }
 
-    // Setup bricks
-    const bricks = [];
-    for (let i = 0; i < 5; i++) { // 5 rows of bricks
-        for (let j = 0; j < 10; j++) { // 10 bricks per row
-            let brickElement = $('<div class="brick"></div>').appendTo(gameContainerElement);
-            bricks.push(new Brick(j * 52+300, i * 30+300, 50, 20, brickElement));
-        }
-    }
+      checkWallCollision() {
+          if (this.ball.x + this.ball.dx > this.canvas.width - this.ball.radius || this.ball.x + this.ball.dx < this.ball.radius) {
+              this.ball.bounceX();
+          }
+          if (this.ball.y + this.ball.dy < this.ball.radius) {
+              this.ball.bounceY();
+          }
+      }
 
-    const collisionManager = new CollisionManager(ball, paddle, bricks, gameContainer, scoreDisplay);
+      checkPaddleCollision() {
+          if (this.ball.x > this.paddle.x && this.ball.x < this.paddle.x + this.paddle.width && this.ball.y + this.ball.dy > this.canvas.height - this.paddle.height - this.ball.radius) {
+              this.ball.bounceY();
+          }
+      }
 
-    requestAnimationFrame(function gameLoop() {
-        if (collisionManager.stop) {
-            return;
-        }
-        ball.move();
-        collisionManager.checkCollisions();
-        requestAnimationFrame(gameLoop);
-    });
-    // animation = setInterval(function gameloop1(){
-    //     if (collisionManager.stop) {
-    //         return;
-    //     }
-    //     ball.move();
-    //     collisionManager.checkCollisions();
-    // }, 100);
+      checkBrickCollisions() {
+          this.bricks.forEach(brick => {
+              if (brick.status === 1) {
+                  if (this.ball.x > brick.x && this.ball.x < brick.x + brick.width && this.ball.y > brick.y && this.ball.y < brick.y + brick.height) {
+                      this.ball.bounceY();
+                      brick.status = 0;
+                  }
+              }
+          });
+      }
+  }
 
+  new Game('gameCanvas');
 });
