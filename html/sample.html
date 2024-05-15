@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brick Breaker Game</title>
-    <link rel="stylesheet" href="../css/sample.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <style>
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-
 <body>
-    <div id="gameContainer">
-        <div id="score">Score: 0</div>
-        <div id="ball"></div>
-        <div id="paddle"></div>
-    </div>
+    <canvas id="gameCanvas" width="1000" height="500"></canvas>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/sample.js"></script>
 </body>
-
 </html>
