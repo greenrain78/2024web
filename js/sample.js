@@ -2,6 +2,7 @@ class Settings {
   constructor() {
     this.hearts = 2; // 생명 == 공이 바닥에 닿으면 하트 감소 == 공 개수 고려
     this.level = 1; // 레벨
+    this.backgroundImg = "../assets/background/background_slumber_party.jpg"; // 배경 이미지
   }
 }
 
@@ -12,7 +13,7 @@ class GameContainer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
     // 게임 요소
-    this.gameBoard = new GameBoard(this.canvas);
+    this.gameBoard = new GameBoard(this.settings, this.canvas);
     this.ballList = [new Ball(this.gameBoard.width / 2, this.gameBoard.height - 300), new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
     this.paddle = new Paddle(
       (this.gameBoard.width - 75) / 2,
@@ -83,7 +84,8 @@ class GameContainer {
 }
 
 class GameBoard {
-  constructor(canvas) {
+  constructor(settings, canvas) {
+    this.settings = settings;
     this.canvas = canvas;
     // 전체 화면 크기로 캔버스 크기 조정
     this.canvas.width = window.innerWidth;
@@ -91,9 +93,12 @@ class GameBoard {
     // 캔버스 크기 조정
     this.width = this.canvas.width;
     this.height = this.canvas.height;
+    // 배경 이미지
+    this.backgroundImg = new Image();
+    this.backgroundImg.src = this.settings.backgroundImg;
   }
   draw(ctx) {
-    ctx.clearRect(0, 0, this.width, this.height);
+    ctx.drawImage(this.backgroundImg, 0, 0, this.width, this.height);
   }
 }
 class Ball {
