@@ -2,7 +2,8 @@ class Settings {
   constructor() {
     this.hearts = 2; // 생명 == 공이 바닥에 닿으면 하트 감소 == 공 개수 고려
     this.level = 1; // 레벨
-    this.backgroundImg = "../assets/background/background_slumber_party.jpg"; // 배경 이미지
+    this.backgroundImg = "../assets/background/slumber_party.jpg"; // 배경 이미지
+    this.brickImg = "../assets/bricks/pillow.png"; // 벽돌 이미지
   }
 }
 
@@ -49,12 +50,12 @@ class GameContainer {
     // 레벨별 벽돌 생성
     if (this.settings.level === 1) {
       var rows = 5;
-      var columns = 8;
+      var columns = 20;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
-          var y = r * (20 + 10) + 30;
-          this.bricks.push(new Brick(x, y));
+          var y = r * (75 + 10) + 30;
+          this.bricks.push(new Brick(x, y, this.settings));
         }
       }
     }
@@ -150,9 +151,12 @@ class Paddle {
 }
 
 class Brick {
-  constructor(x, y) {
+  constructor(x, y, settings) {
+    this.settings = settings;
+    this.img = new Image();
+    this.img.src = this.settings.brickImg;
     this.width = 75;
-    this.height = 20;
+    this.height = 75;
     this.x = x;
     this.y = y;
     this.status = 1;
@@ -161,11 +165,12 @@ class Brick {
   draw(ctx) {
     // 안깨진 벽돌만 그리기
     if (this.status === 1) {
-      ctx.beginPath();
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+      // ctx.beginPath();
+      // ctx.rect(this.x, this.y, this.width, this.height);
+      // ctx.fillStyle = "#0095DD";
+      // ctx.fill();
+      // ctx.closePath();
     }
   }
 }
