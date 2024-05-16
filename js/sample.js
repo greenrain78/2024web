@@ -1,38 +1,40 @@
-class Game {
-  constructor(canvasId) {
+class GameContainer {
+  constructor(canvasId, level) {
+    // 설정 값
+    this.hearts = 1;
+    this.level = level;
+    // 캔버스 설정
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
+    // 게임 요소
+    this.gameBoard = new GameBoard(this.canvas);
     this.ball = new Ball(this.canvas.width / 2, this.canvas.height - 30);
     this.paddle = new Paddle(
       (this.canvas.width - 75) / 2,
       this.canvas.height - 10
     );
     this.bricks = [];
-    this.rows = 5;
-    this.columns = 8;
     this.collisionManager = new CollisionManager(
+      this,
       this.ball,
       this.paddle,
       this.bricks,
       this.canvas
     );
-    this.createBricks();
-    this.initMouseControl();
+    // 게임 초기화
+    this.init();
   }
   run() {
+    // 게임 루프 시작
     this.loop();
   }
-
-  createBricks() {
-    for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.columns; c++) {
-        this.bricks.push(new Brick(c * (75 + 10) + 30, r * (20 + 10) + 30));
-      }
-    }
+  init() {
+    this.createBricks();
+    this.initListeners();
   }
-
-  initMouseControl() {
-    $(this.canvas).mousemove((event) => {
+  initListeners() {
+    // 마우스 이벤트
+    this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
       if (relativeX > 0 && relativeX < this.canvas.width) {
         this.paddle.x = relativeX - this.paddle.width / 2;
@@ -40,25 +42,50 @@ class Game {
     });
   }
 
+  createBricks() {
+    // 레벨별 벽돌 생성
+    if (this.level === 1) {
+      var rows = 5;
+      var columns = 8;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+          var x = c * (75 + 10) + 30;
+          var y = r * (20 + 10) + 30;
+          this.bricks.push(new Brick(x, y));
+        }
+      }
+    }
+  }
+
   loop() {
+    // 캔버스 초기화
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // 게임 요소 그리기
     this.ball.draw(this.ctx);
     this.paddle.draw(this.ctx);
     this.bricks.forEach((brick) => {
       brick.draw(this.ctx);
     });
+    // 충돌 체크
     this.collisionManager.checkCollisions();
 
-    if (this.ball.y + this.ball.dy > this.canvas.height) {
+    // 게임 오버 체크 및 재귀 호출
+    if (this.hearts > 0) {
+      requestAnimationFrame(() => this.loop());
+    } else {
       alert("GAME OVER");
-      document.location.reload();
-      return;
     }
-
-    requestAnimationFrame(() => this.loop());
   }
 }
 
+class GameBoard {
+  constructor(canvas) {
+    this.canvas = canvas;
+    // 캔버스 크기 조정
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+}
 class Ball {
   constructor(x, y) {
     this.x = x;
@@ -117,6 +144,7 @@ class Brick {
   }
 
   draw(ctx) {
+    // 안깨진 벽돌만 그리기
     if (this.status === 1) {
       ctx.beginPath();
       ctx.rect(this.x, this.y, this.width, this.height);
@@ -128,7 +156,8 @@ class Brick {
 }
 
 class CollisionManager {
-  constructor(ball, paddle, bricks, canvas) {
+  constructor(game_container, ball, paddle, bricks, canvas) {
+    this.game_container = game_container;
     this.ball = ball;
     this.paddle = paddle;
     this.bricks = bricks;
@@ -136,13 +165,23 @@ class CollisionManager {
   }
 
   checkCollisions() {
+    // 충돌 체크
     this.checkWallCollision();
     this.checkPaddleCollision();
     this.checkBrickCollisions();
+    // 게임 오버 체크
+    this.checkGameOver();
+    // 게임 요소 이동
     this.ball.move();
   }
-
+  checkGameOver() {
+    // 게임 오버 체크
+    if (this.ball.y > this.canvas.height) {
+      this.game_container.hearts--;
+    }
+  }
   checkWallCollision() {
+    // 벽과 충돌 체크
     if (
       this.ball.x + this.ball.dx > this.canvas.width - this.ball.radius ||
       this.ball.x + this.ball.dx < this.ball.radius
@@ -155,20 +194,22 @@ class CollisionManager {
   }
 
   checkPaddleCollision() {
+    // 패들과 충돌 체크
     if (
       this.ball.x > this.paddle.x &&
       this.ball.x < this.paddle.x + this.paddle.width &&
-      this.ball.y + this.ball.dy > this.canvas.height - this.paddle.height - this.ball.radius
+      this.ball.y + this.ball.dy >
+        this.canvas.height - this.paddle.height - this.ball.radius
     ) {
       this.ball.bounceY();
     }
   }
 
   checkBrickCollisions() {
+    // 벽돌과 충돌 체크
     this.bricks.forEach((brick) => {
       if (brick.status === 1) {
-        if (
-          this.isRectCollision(brick)) {
+        if (this.isRectCollision(brick)) {
           this.ball.bounceY();
           brick.status = 0;
         }
@@ -190,6 +231,7 @@ class CollisionManager {
 }
 
 $(document).ready(function () {
-  let game = new Game("gameCanvas");
+  // 게임 시작
+  let game = new GameContainer("gameCanvas", 1);
   game.run();
 });
