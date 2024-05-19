@@ -355,7 +355,7 @@ class ClothItem extends Item {
     this.img = new Image();
     this.img.src = "../assets/" + cloth;
   }
-  effect(game) {
+  evnet(game) {
     // 옷 바꾸기
     console.log(this.cloth);
   }
@@ -364,9 +364,10 @@ class EffectItem extends Item {
   constructor(x, y, effect) {
     super(x, y);
     this.img = new Image();
+    this.effect = effect;
     this.img.src = "../assets/bricks/" + itemEffectImages[effect];
   }
-  effect(game) {
+  evnet(game) {
     if (this.effect === "addBall") {
       game.addBall();
     }
@@ -399,7 +400,7 @@ class CollisionManager {
     this.itemList.forEach((item) => {
       if (this.isPaddleCollision(item)){
         this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
-        item.effect(this.gameContainer);
+        item.evnet(this.gameContainer);
       }
       if (this.isOutOfGameBoard(item)) {
         this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
