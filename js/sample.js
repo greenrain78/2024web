@@ -199,16 +199,19 @@ class ItemBrick extends Brick {
   }
 
   draw(ctx) {
-    super.draw(ctx); // 원래 벽돌 이미지를 그림
+    if (this.status === 1) {
+      super.draw(ctx); // 원래 벽돌 이미지를 그림
 
-    // 아이템 이미지를 작게 그림
-    ctx.drawImage(
-      this.itemimg,
-      this.x + this.width / 4, 
-      this.y + this.height / 4, 
-      this.width / 2, 
-      this.height / 2 
-    );
+      // 아이템 이미지를 작게 그림
+      ctx.drawImage(
+        this.itemimg,
+        this.x + this.width / 4, 
+        this.y + this.height / 4, 
+        this.width / 2, 
+        this.height / 2 
+      );
+    }
+    
   }
 
   applyEffect(game) {
