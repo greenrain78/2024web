@@ -15,6 +15,7 @@ class GameDisplay {
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
     this.heartsNode = $("#hearts");
+    this.levelNode = $("#level");
     this.initListeners();
   }
   initListeners() {
@@ -63,6 +64,11 @@ class GameDisplay {
     // 생명 업데이트
     this.hearts += hearts;
     this.heartsNode.text(`Hearts: ${this.hearts}`);
+  }
+  updateLevel(level) {
+    // 레벨 업데이트
+    this.level = level;
+    this.levelNode.text(`Level: ${this.level}`);
   }
 }
 var gameDisplay = new GameDisplay();
@@ -366,6 +372,7 @@ class CollisionManager {
 
 $(document).ready(function () {
   // 게임 시작
+  gameDisplay.updateLevel(1);
   let game = new GameContainer("gameCanvas");
   game.run();
 });
