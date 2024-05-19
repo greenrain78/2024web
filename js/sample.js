@@ -4,6 +4,7 @@ class Settings {
     this.level = 1; // 레벨
     this.backgroundImg = "../assets/background/img_1.jpg"; // 배경 이미지
     this.brickImg = "../assets/bricks/img_1.jpg"; // 벽돌 이미지
+    this.itemBrickImg = "../assets/bricks/item.jpg"; // 아이템 이미지 
   }
 }
 
@@ -26,7 +27,8 @@ class GameContainer {
       this.ballList,
       this.paddle,
       this.bricks,
-      this.gameBoard
+      this.gameBoard,
+      this
     );
     // 게임 초기화
     this.createBricks();
@@ -55,7 +57,13 @@ class GameContainer {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
           var y = r * (75 + 10) + 30;
-          this.bricks.push(new Brick(x, y, this.settings));
+          if (Math.random() < 0.1) {
+            this.bricks.push(new ItemBrick(x, y, this.settings,"addBall"));
+          } else {
+            this.bricks.push(new Brick(x, y, this.settings));
+          }
+          
+          
         }
       }
     }
@@ -81,6 +89,13 @@ class GameContainer {
     } else {
       alert("GAME OVER");
     }
+  }
+
+  // 공 개수 추가 아이템 
+  addBall() {
+    var paddlex = this.paddle.x + this.paddle.width/2; 
+    var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
+    this.ballList.push(new Ball(paddlex, paddley));
   }
 }
 
@@ -175,13 +190,29 @@ class Brick {
   }
 }
 
+class ItemBrick extends Brick {
+  constructor(x,y,settings,effect) {
+    super(x,y,settings);
+    this.img.src= this.settings.itemBrickImg;
+    this.effect = effect; //아이템 이름  
+  }
+
+  applyEffect(game) {
+    // 아이템1. 공 개수 추가 
+    if (this.effect === "addBall") {
+      game.addBall();
+    }
+  }
+}
+
 class CollisionManager {
-  constructor(settings, ballList, paddle, bricks, gameBoard) {
+  constructor(settings, ballList, paddle, bricks, gameBoard, gameContainer) {
     this.settings = settings;
     this.ballList = ballList;
     this.paddle = paddle;
     this.bricks = bricks;
     this.gameBoard = gameBoard;
+    this.gameContainer = gameContainer;
   }
 
   checkCollisions() {
@@ -234,6 +265,9 @@ class CollisionManager {
         if (this.isRectCollision(ball, brick)) {
           ball.bounceY();
           brick.status = 0;
+          if (brick instanceof ItemBrick) {
+            brick.applyEffect(this.gameContainer);
+          }
         }
       }
     });
