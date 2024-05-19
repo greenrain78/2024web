@@ -12,8 +12,21 @@ class GameDisplay {
     // node
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
+    this.initListeners();
   }
-  updateBackgroundImg() {
+  initListeners() {
+    $("#backgroundBtn1").click(() => {
+      this.updateBackgroundImg(0);
+    });
+    $("#backgroundBtn2").click(() => {
+      this.updateBackgroundImg(1);
+    });
+    $("#backgroundBtn3").click(() => {
+      this.updateBackgroundImg(2);
+    });
+  }
+  updateBackgroundImg(idx) {
+    this.backgroundImgIdx = idx;
     // 배경 이미지 업데이트
     this.backgroundNode.css(
       "background-image",
@@ -53,7 +66,7 @@ class GameContainer {
       this.gameBoard
     );
     // 게임 초기화
-    gameDisplay.updateBackgroundImg();
+    this.createDisplay();
     this.createBricks();
     this.initListeners();
   }
@@ -94,6 +107,13 @@ class GameContainer {
         }
       }
     }
+  }
+  createDisplay() {
+    if (gameDisplay.level === 1) {
+      gameDisplay.updateBackgroundImg(0);
+    }
+    
+
   }
 
   loop() {
