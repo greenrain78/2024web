@@ -19,6 +19,7 @@ class GameDisplay {
     this.scoreNode = $("#score");
     this.heartsNode = $("#hearts");
     this.levelNode = $("#level");
+    this.collectedClothes = new Set(); // 옷 이미지 수집 상태
     this.initListeners();
   }
   initListeners() {
@@ -73,6 +74,19 @@ class GameDisplay {
     this.level = level;
     this.levelNode.text(`Level: ${this.level}`);
   }
+
+  addCollectedCloth(image) {
+    this.collectedClothes.add(image);
+  }
+
+  checkGameClear() {
+    var GoalClothes = clothImages[this.level - 1];
+    if (GoalClothes.every(cloth => this.collectedClothes.has(cloth))) {
+      alert("Game Clear!");
+      this.isPaused = true;
+    }
+  }
+
 }
 var gameDisplay = new GameDisplay();
 
@@ -315,6 +329,7 @@ class ClothBrick extends Brick {
     var levelcloth = clothImages[gameDisplay.level-1];
     var randomcloth = levelcloth[Math.floor(Math.random()*levelcloth.length)]
     this.img.src= "../assets/"+ randomcloth;
+    this.randomCloth = randomcloth;
   }
 
   draw(ctx) {
@@ -331,6 +346,17 @@ class ClothBrick extends Brick {
       );
     }
     
+  }
+
+  remove() {
+    this.status = 0;
+    gameDisplay.addCollectedCloth(this.randomCloth); // 옷 이미지 수집 상태 업데이트
+    if (!gameDisplay.isPaused) {
+      gameDisplay.checkGameClear(); // 게임 클리어 체크
+      if (gameDisplay.isPaused && gameDisplay.level<3) {
+        gameDisplay.updateLevel(gameDisplay.level + 1); // 클리어한 경우 다음 레벨로 이동
+      }
+    }
   }
 }
 
@@ -433,6 +459,9 @@ class CollisionManager {
       if (brick.status === 1) {
         if (this.isRectCollision(ball, brick)) {
           ball.bounceY();
+          if (brick instanceof ClothBrick) {
+            brick.remove();
+          }
           brick.status = 0;
           gameDisplay.updateScore(10);
           if (brick instanceof ItemBrick) {
