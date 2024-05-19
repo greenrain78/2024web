@@ -5,7 +5,7 @@ itemBrickImages = {"addBall": "item.jpg"};
 class GameDisplay {
   constructor() {
     this.level = 1; // 레벨
-    this.hearts = 3; // 생명
+    this.hearts = 2; // 생명
     this.score = 0; // 점수
     this.isPaused = false; // 일시정지 여부
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
@@ -14,6 +14,8 @@ class GameDisplay {
     // node
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
+    this.heartsNode = $("#hearts");
+    this.levelNode = $("#level");
     this.initListeners();
   }
   initListeners() {
@@ -56,7 +58,17 @@ class GameDisplay {
   updateScore(score) {
     // 점수 업데이트
     this.score += score;
-    this.scoreNode.text(this.score);
+    this.scoreNode.text(`Score: ${this.score}`);
+  }
+  updateHearts(hearts) {
+    // 생명 업데이트
+    this.hearts += hearts;
+    this.heartsNode.text(`Hearts: ${this.hearts}`);
+  }
+  updateLevel(level) {
+    // 레벨 업데이트
+    this.level = level;
+    this.levelNode.text(`Level: ${this.level}`);
   }
 }
 var gameDisplay = new GameDisplay();
@@ -133,6 +145,10 @@ class GameContainer {
     if (gameDisplay.level === 1) {
       gameDisplay.updateBackgroundImg(0);
       gameDisplay.updateBrickImg(0);
+      gameDisplay.hearts = 2;
+      gameDisplay.updateHearts(0);
+      gameDisplay.score = 0;
+      gameDisplay.updateScore(0);
     }
   }
 
@@ -158,6 +174,7 @@ class GameContainer {
       requestAnimationFrame(() => this.loop());
     } 
     else {
+      console.log(gameDisplay.hearts);
       alert("Game Over");
     }
   }
@@ -165,6 +182,7 @@ class GameContainer {
   addBall() {
     var paddlex = this.paddle.x + this.paddle.width/2; 
     var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
+    gameDisplay.updateHearts(1);
     this.ballList.push(new Ball(paddlex, paddley));
   }
 }
@@ -304,7 +322,8 @@ class CollisionManager {
   checkGameOver(ball) {
     // 게임 오버 체크
     if(ball.y > this.gameBoard.height) {
-      gameDisplay.hearts--;
+      this.gameContainer.ballList.splice(this.gameContainer.ballList.indexOf(ball), 1); // 공 제거
+      gameDisplay.updateHearts(-1); // 생명 감소
     }
   }
   checkWallCollision(ball) {
@@ -363,6 +382,7 @@ class CollisionManager {
 
 $(document).ready(function () {
   // 게임 시작
+  gameDisplay.updateLevel(1);
   let game = new GameContainer("gameCanvas");
   game.run();
 });
