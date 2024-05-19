@@ -193,8 +193,22 @@ class Brick {
 class ItemBrick extends Brick {
   constructor(x,y,settings,effect) {
     super(x,y,settings);
-    this.img.src= this.settings.itemBrickImg;
+    this.itemimg = new Image();
+    this.itemimg.src = this.settings.itemBrickImg;
     this.effect = effect; //아이템 이름  
+  }
+
+  draw(ctx) {
+    super.draw(ctx); // 원래 벽돌 이미지를 그림
+
+    // 아이템 이미지를 작게 그림
+    ctx.drawImage(
+      this.itemimg,
+      this.x + this.width / 4, 
+      this.y + this.height / 4, 
+      this.width / 2, 
+      this.height / 2 
+    );
   }
 
   applyEffect(game) {
