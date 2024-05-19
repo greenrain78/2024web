@@ -93,13 +93,10 @@ class GameDisplay {
     });
   }
 
-  addCollectedCloth(image) {
-    this.collectedClothes.add(image);
-  }
 
   checkGameClear() {
     var GoalClothes = clothImages[this.level - 1];
-    if (GoalClothes.every(cloth => this.collectedClothes.has(cloth))) {
+    if (GoalClothes.every(cloth => this.closetList.has(cloth))) {
       alert("Game Clear!");
       this.isPaused = true;
     }
@@ -362,12 +359,8 @@ class ClothBrick extends Brick {
   }
   applyEffect(game) {
     // 아이템2. 옷 바꾸기
-    game.itemList.push(new ClothItem(this.x, this.y, this.randomcloth));
-  }
-
-  remove() {
-    this.status = 0;
-    gameDisplay.addCollectedCloth(this.randomCloth); // 옷 이미지 수집 상태 업데이트
+    //game.itemList.push(new ClothItem(this.x, this.y, this.randomcloth));
+    
     if (!gameDisplay.isPaused) {
       gameDisplay.checkGameClear(); // 게임 클리어 체크
       if (gameDisplay.isPaused && gameDisplay.level<3) {
@@ -375,6 +368,7 @@ class ClothBrick extends Brick {
       }
     }
   }
+
 }
 
 class Item {
@@ -497,9 +491,6 @@ class CollisionManager {
       if (brick.status === 1) {
         if (this.isRectCollision(ball, brick)) {
           ball.bounceY();
-          if (brick instanceof ClothBrick) {
-            brick.remove();
-          }
           brick.status = 0;
           gameDisplay.updateScore(10);
           if (brick instanceof ItemBrick) {
@@ -507,7 +498,7 @@ class CollisionManager {
           } else if (brick instanceof ClothBrick) {
             console.log(brick.cloth);
             gameDisplay.updateCloset(brick.cloth);
-            // brick.applyEffect(this.gameContainer);
+            brick.applyEffect(this.gameContainer);
           }
         }
       }
