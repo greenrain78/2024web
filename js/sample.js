@@ -361,7 +361,7 @@ class CollisionManager {
   }
   checkGameOver(ball) {
     // 게임 오버 체크
-    if(ball.y > this.gameBoard.height) {
+    if(this.isOutOfGameBoard(ball)) {
       this.gameContainer.ballList.splice(this.gameContainer.ballList.indexOf(ball), 1); // 공 제거
       gameDisplay.updateHearts(-1); // 생명 감소
     }
@@ -379,13 +379,13 @@ class CollisionManager {
     }
   }
 
-  isPaddleCollision(ball) {
+  isPaddleCollision(obj) {
     // 패들과 충돌 체크
     if (
-      ball.x > this.paddle.x &&
-      ball.x < this.paddle.x + this.paddle.width &&
-      ball.y + ball.dy >
-        this.gameBoard.height - this.paddle.height - ball.radius
+      obj.x > this.paddle.x &&
+      obj.x < this.paddle.x + this.paddle.width &&
+      obj.y + obj.dy >
+        this.gameBoard.height - this.paddle.height - obj.radius
     ) {
       return true;
     }
