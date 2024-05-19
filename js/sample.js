@@ -308,8 +308,10 @@ class Item {
   constructor(x, y, effect) {
     this.x = x;
     this.y = y;
+    this.dy = 3;
     this.width = 20;
     this.height = 20;
+    this.radius = 10;
     this.effect = effect;
     this.img = new Image();
     this.img.src = "../assets/bricks/" + itemEffectImages[effect];
@@ -319,7 +321,7 @@ class Item {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
   move() {
-    this.y += 1;
+    this.y += this.dy;
   }
 }
 class CollisionManager {
@@ -336,7 +338,10 @@ class CollisionManager {
     // 충돌 체크
     this.ballList.forEach((ball) => {
       this.checkWallCollision(ball);
-      this.checkPaddleCollision(ball);
+      if (this.isPaddleCollision(ball)){
+        ball.bounceY();
+      }
+      
       this.checkBrickCollisions(ball);
       // 게임 오버 체크
       this.checkGameOver(ball);
@@ -344,6 +349,13 @@ class CollisionManager {
       ball.move();
     });
     this.itemList.forEach((item) => {
+      if (this.isPaddleCollision(item)){
+        this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
+        this.gameContainer.addBall();
+      }
+      if (this.isOutOfGameBoard(item)) {
+        this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
+      }
       item.move();
     });
   }
@@ -367,7 +379,7 @@ class CollisionManager {
     }
   }
 
-  checkPaddleCollision(ball) {
+  isPaddleCollision(ball) {
     // 패들과 충돌 체크
     if (
       ball.x > this.paddle.x &&
@@ -375,7 +387,13 @@ class CollisionManager {
       ball.y + ball.dy >
         this.gameBoard.height - this.paddle.height - ball.radius
     ) {
-      ball.bounceY();
+      return true;
+    }
+  }
+  isOutOfGameBoard(obj) {
+    // 게임 보드 밖으로 나갔는지 체크
+    if (obj.y > this.gameBoard.height) {
+      return true;
     }
   }
 
