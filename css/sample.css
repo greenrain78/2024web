@@ -18,17 +18,25 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -3;
+    z-index: -10;
     background-size: contain; /* 이미지를 가로, 세로 중 하나에 맞춤 - cover는 꽉맞춤*/
     background-position: center; 
     background-repeat: no-repeat;
 }
-
-.closet {
+#clothesList{
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    z-index: -5;
+}
+#closet {
     position: absolute;
     bottom: 0;
     left: 0;
-    z-index: -2;
+    z-index: -5;
+}
+.clothes {
+    width: 100px;
 }
 
 #closetImg {

@@ -14,11 +14,13 @@ class GameDisplay {
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
     this.brickImg = new Image(); // 벽돌 이미지
+    this.closetList = []; // 옷 이미지
     // node
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
     this.heartsNode = $("#hearts");
     this.levelNode = $("#level");
+    this.closetListNode = $("#clothesList");
     this.initListeners();
   }
   initListeners() {
@@ -72,6 +74,23 @@ class GameDisplay {
     // 레벨 업데이트
     this.level = level;
     this.levelNode.text(`Level: ${this.level}`);
+  }
+  updateCloset(clothes) {
+    // 옷장에 있는지 확인
+    if (this.closetList.includes(clothes)) {
+      console.log("이미 옷장에 있습니다.");
+      return;
+    }
+    // 옷장에 추가
+    this.closetList.push(clothes);
+    // 옷장 업데이트
+    this.closetListNode.html("");
+    this.closetList.forEach((cloth) => {
+      var img = new Image();
+      img.src = "../assets/" + cloth;
+      img.classList.add("clothes");
+      this.closetListNode.append(img);
+    });
   }
 }
 var gameDisplay = new GameDisplay();
@@ -154,6 +173,8 @@ class GameContainer {
       gameDisplay.updateHearts(0);
       gameDisplay.score = 0;
       gameDisplay.updateScore(0);
+
+      gameDisplay.updateCloset("clothes1-1.png")
     }
   }
 
@@ -308,8 +329,8 @@ class ClothBrick extends Brick {
     super(x, y);
     this.img = new Image();
     var levelcloth = clothImages[gameDisplay.level-1];
-    this.randomcloth = levelcloth[Math.floor(Math.random()*levelcloth.length)]
-    this.img.src= "../assets/"+ this.randomcloth;
+    this.cloth = levelcloth[Math.floor(Math.random()*levelcloth.length)]
+    this.img.src= "../assets/"+ this.cloth;
   }
 
   draw(ctx) {
@@ -355,7 +376,7 @@ class ClothItem extends Item {
     this.img = new Image();
     this.img.src = "../assets/" + cloth;
   }
-  effect(game) {
+  evnet(game) {
     // 옷 바꾸기
     console.log(this.cloth);
   }
@@ -364,9 +385,10 @@ class EffectItem extends Item {
   constructor(x, y, effect) {
     super(x, y);
     this.img = new Image();
+    this.effect = effect;
     this.img.src = "../assets/bricks/" + itemEffectImages[effect];
   }
-  effect(game) {
+  evnet(game) {
     if (this.effect === "addBall") {
       game.addBall();
     }
@@ -399,7 +421,7 @@ class CollisionManager {
     this.itemList.forEach((item) => {
       if (this.isPaddleCollision(item)){
         this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
-        item.effect(this.gameContainer);
+        item.evnet(this.gameContainer);
       }
       if (this.isOutOfGameBoard(item)) {
         this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
@@ -456,7 +478,9 @@ class CollisionManager {
           if (brick instanceof ItemBrick) {
             brick.applyEffect(this.gameContainer);
           } else if (brick instanceof ClothBrick) {
-            brick.applyEffect(this.gameContainer);
+            console.log(brick.cloth);
+            gameDisplay.updateCloset(brick.cloth);
+            // brick.applyEffect(this.gameContainer);
           }
         }
       }
