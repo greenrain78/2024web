@@ -9,6 +9,7 @@ class GameDisplay {
     this.isPaused = false; // 일시정지 여부
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
+    this.brickImg = new Image(); // 벽돌 이미지
     // node
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
@@ -24,6 +25,15 @@ class GameDisplay {
     $("#backgroundBtn3").click(() => {
       this.updateBackgroundImg(2);
     });
+    $("#brickBtn1").click(() => {
+      this.updateBrickImg(0);
+    });
+    $("#brickBtn2").click(() => {
+      this.updateBrickImg(1);
+    });
+    $("#brickBtn3").click(() => {
+      this.updateBrickImg(2);
+    });
   }
   updateBackgroundImg(idx) {
     this.backgroundImgIdx = idx;
@@ -33,9 +43,14 @@ class GameDisplay {
       "url(../assets/background/" + backgroundImages[this.backgroundImgIdx] + ")"
     );
   }
+  updateBrickImg(idx) {
+    this.brickImgIdx = idx;
+    this.brickImg = new Image();
+    this.brickImg.src = "../assets/bricks/" + brickImages[this.brickImgIdx];
+  }
   getBrickImg() {
     // 벽돌 이미지 가져오기
-    return "../assets/bricks/" + brickImages[this.brickImgIdx];
+    return this.brickImg
   }
   updateScore(score) {
     // 점수 업데이트
@@ -111,6 +126,7 @@ class GameContainer {
   createDisplay() {
     if (gameDisplay.level === 1) {
       gameDisplay.updateBackgroundImg(0);
+      gameDisplay.updateBrickImg(0);
     }
     
 
@@ -207,8 +223,6 @@ class Paddle {
 
 class Brick {
   constructor(x, y) {
-    this.img = new Image();
-    this.img.src = gameDisplay.getBrickImg();
     this.width = 75;
     this.height = 75;
     this.x = x;
@@ -218,8 +232,9 @@ class Brick {
 
   draw(ctx) {
     // 안깨진 벽돌만 그리기
+    var img = gameDisplay.getBrickImg();
     if (this.status === 1) {
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+      ctx.drawImage(img, this.x, this.y, this.width, this.height);
     }
   }
 }
