@@ -5,7 +5,7 @@ itemBrickImages = {"addBall": "item.jpg"};
 class GameDisplay {
   constructor() {
     this.level = 1; // 레벨
-    this.hearts = 3; // 생명
+    this.hearts = 2; // 생명
     this.score = 0; // 점수
     this.isPaused = false; // 일시정지 여부
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
@@ -158,6 +158,7 @@ class GameContainer {
       requestAnimationFrame(() => this.loop());
     } 
     else {
+      console.log(gameDisplay.hearts);
       alert("Game Over");
     }
   }
@@ -165,6 +166,7 @@ class GameContainer {
   addBall() {
     var paddlex = this.paddle.x + this.paddle.width/2; 
     var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
+    gameDisplay.hearts++;
     this.ballList.push(new Ball(paddlex, paddley));
   }
 }
@@ -294,6 +296,7 @@ class CollisionManager {
   checkGameOver(ball) {
     // 게임 오버 체크
     if(ball.y > this.gameBoard.height) {
+      this.gameContainer.ballList.splice(this.gameContainer.ballList.indexOf(ball), 1); // 공 제거
       gameDisplay.hearts--;
     }
   }
