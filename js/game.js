@@ -6,6 +6,7 @@ class GameDisplay {
     this.level = 1; // 레벨
     this.hearts = 3; // 생명
     this.score = 0; // 점수
+    this.isPaused = false; // 일시정지 여부
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
     // node
@@ -68,6 +69,16 @@ class GameContainer {
         this.paddle.x = relativeX - this.paddle.width / 2;
       }
     });
+    // 키보드 이벤트
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        // 스페이스바
+        this.isPaused = !this.isPaused;
+        if (!this.isPaused) {
+          this.loop(); // 재개할 때 루프를 다시 시작
+        }
+      }
+    });
   }
 
   createBricks() {
@@ -86,6 +97,9 @@ class GameContainer {
   }
 
   loop() {
+    if (this.isPaused) {
+      return; // 일시정지 상태이면 루프를 중단
+    }
     // 배경 그리기
     this.gameBoard.draw(this.ctx);
     // 게임 요소 그리기
@@ -102,8 +116,9 @@ class GameContainer {
     // 게임 오버 체크 및 재귀 호출
     if (gameDisplay.hearts > 0) {
       requestAnimationFrame(() => this.loop());
-    } else {
-      alert("GAME OVER");
+    } 
+    else {
+      alert("Game Over");
     }
   }
 }
