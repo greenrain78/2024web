@@ -2,8 +2,8 @@ class Settings {
   constructor() {
     this.hearts = 2; // 생명 == 공이 바닥에 닿으면 하트 감소 == 공 개수 고려
     this.level = 1; // 레벨
-    this.backgroundImg = "../assets/background/slumber_party.jpg"; // 배경 이미지
-    this.brickImg = "../assets/bricks/pillow.png"; // 벽돌 이미지
+    this.backgroundImg = "../assets/background/img_1.jpg"; // 배경 이미지
+    this.brickImg = "../assets/bricks/img_1.jpg"; // 벽돌 이미지
   }
 }
 
