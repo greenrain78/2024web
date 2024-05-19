@@ -2,8 +2,17 @@ class Settings {
   constructor() {
     this.hearts = 2; // 생명 == 공이 바닥에 닿으면 하트 감소 == 공 개수 고려
     this.level = 1; // 레벨
-    this.backgroundImg = "../assets/background/img_1.jpg"; // 배경 이미지
+    this.backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
+    this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImg = "../assets/bricks/img_1.jpg"; // 벽돌 이미지
+  }
+  updateBackgroundImg(idx) {
+    // 배경 이미지 업데이트
+    this.backgroundImgIdx = idx;
+  }
+  getBackgroundImg() {
+    // 배경 이미지 가져오기
+    return this.backgroundImages[this.backgroundImgIdx];
   }
 }
 var settings = new Settings();
@@ -91,12 +100,9 @@ class GameBoard {
     // 캔버스 크기 조정
     this.width = this.canvas.width;
     this.height = this.canvas.height;
-    // 배경 이미지
-    this.backgroundImg = new Image();
-    this.backgroundImg.src = settings.backgroundImg;
   }
   draw(ctx) {
-    ctx.drawImage(this.backgroundImg, 0, 0, this.width, this.height);
+    ctx.clearRect(0, 0, this.width, this.height);
   }
 }
 class Ball {
