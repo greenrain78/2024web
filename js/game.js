@@ -5,12 +5,16 @@ class GameDisplay {
   constructor() {
     this.level = 1; // 레벨
     this.hearts = 3; // 생명
+    this.score = 0; // 점수
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
+    // node
+    this.backgroundNode = $("#background");
+    this.scoreNode = $("#score");
   }
   updateBackgroundImg() {
     // 배경 이미지 업데이트
-    $("#background").css(
+    this.backgroundNode.css(
       "background-image",
       "url(../assets/background/" + backgroundImages[this.backgroundImgIdx] + ")"
     );
@@ -18,6 +22,11 @@ class GameDisplay {
   getBrickImg() {
     // 벽돌 이미지 가져오기
     return "../assets/bricks/" + brickImages[this.brickImgIdx];
+  }
+  updateScore(score) {
+    // 점수 업데이트
+    this.score += score;
+    this.scoreNode.text(this.score);
   }
 }
 var gameDisplay = new GameDisplay();
@@ -238,6 +247,7 @@ class CollisionManager {
         if (this.isRectCollision(ball, brick)) {
           ball.bounceY();
           brick.status = 0;
+          gameDisplay.updateScore(10);
         }
       }
     });
