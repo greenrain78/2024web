@@ -14,6 +14,7 @@ class GameDisplay {
     // node
     this.backgroundNode = $("#background");
     this.scoreNode = $("#score");
+    this.heartsNode = $("#hearts");
     this.initListeners();
   }
   initListeners() {
@@ -56,7 +57,12 @@ class GameDisplay {
   updateScore(score) {
     // 점수 업데이트
     this.score += score;
-    this.scoreNode.text(this.score);
+    this.scoreNode.text(`Score: ${this.score}`);
+  }
+  updateHearts(hearts) {
+    // 생명 업데이트
+    this.hearts += hearts;
+    this.heartsNode.text(`Hearts: ${this.hearts}`);
   }
 }
 var gameDisplay = new GameDisplay();
@@ -133,6 +139,10 @@ class GameContainer {
     if (gameDisplay.level === 1) {
       gameDisplay.updateBackgroundImg(0);
       gameDisplay.updateBrickImg(0);
+      gameDisplay.hearts = 2;
+      gameDisplay.updateHearts(0);
+      gameDisplay.score = 0;
+      gameDisplay.updateScore(0);
     }
   }
 
@@ -166,7 +176,7 @@ class GameContainer {
   addBall() {
     var paddlex = this.paddle.x + this.paddle.width/2; 
     var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
-    gameDisplay.hearts++;
+    gameDisplay.updateHearts(1);
     this.ballList.push(new Ball(paddlex, paddley));
   }
 }
@@ -297,7 +307,7 @@ class CollisionManager {
     // 게임 오버 체크
     if(ball.y > this.gameBoard.height) {
       this.gameContainer.ballList.splice(this.gameContainer.ballList.indexOf(ball), 1); // 공 제거
-      gameDisplay.hearts--;
+      gameDisplay.updateHearts(-1); // 생명 감소
     }
   }
   checkWallCollision(ball) {
