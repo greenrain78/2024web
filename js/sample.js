@@ -1,6 +1,9 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
 brickImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 벽돌 이미지
-itemEffectImages = {"addBall": "item.jpg"};
+itemEffectImages = {"addBall": "item.jpg"}; // 아이템 이미지 
+clothImages = [["clothes1-1.png","clothes1-2.png","clothes1-3.png","clothes1-4.png"],
+["clothes2-1.png","clothes2-2.png","clothes2-3.png","clothes2-4.png","clothes2-5.png","clothes2-6.png"],
+["clothes3-1.png","clothes3-2.png","clothes3-3.png","clothes3-4.png","clothes3-5.png","clothes3-6.png"]];
 
 class GameDisplay {
   constructor() {
@@ -137,7 +140,7 @@ class GameContainer {
           if (Math.random() < 0.1) {
             this.bricks.push(new ItemBrick(x, y, "addBall"));
           } else {
-            this.bricks.push(new Brick(x, y));
+            this.bricks.push(new ClothBrick(x, y));
           }
         }
       }
@@ -304,6 +307,33 @@ class ItemBrick extends Brick {
     }
   }
 }
+
+class ClothBrick extends Brick {
+  constructor(x, y) {
+    super(x, y);
+    this.img = new Image();
+    var levelcloth = clothImages[gameDisplay.level-1];
+    var randomcloth = levelcloth[Math.floor(Math.random()*levelcloth.length)]
+    this.img.src= "../assets/"+ randomcloth;
+  }
+
+  draw(ctx) {
+    if (this.status === 1) {
+      super.draw(ctx); // 원래 벽돌 이미지를 그림
+
+      // 아이템 이미지를 작게 그림
+      ctx.drawImage(
+        this.img,
+        this.x + this.width / 4, 
+        this.y + this.height / 4, 
+        this.width / 2, 
+        this.height / 2 
+      );
+    }
+    
+  }
+}
+
 class Item {
   constructor(x, y, effect) {
     this.x = x;
