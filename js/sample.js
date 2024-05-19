@@ -8,7 +8,7 @@ clothImages = [["clothes1-1.png","clothes1-2.png","clothes1-3.png","clothes1-4.p
 class GameDisplay {
   constructor() {
     this.level = 1; // 레벨
-    this.hearts = 2; // 생명
+    this.hearts = 1; // 생명
     this.score = 0; // 점수
     this.isPaused = false; // 일시정지 여부
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
@@ -84,7 +84,7 @@ class GameContainer {
     // 게임 요소
     
     this.gameBoard = new GameBoard(this.canvas);
-    this.ballList = [new Ball(this.gameBoard.width / 2, this.gameBoard.height - 300), new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
+    this.ballList = [new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
     this.itemList = [];
     this.paddle = new Paddle(
       (this.gameBoard.width - 75) / 2,
