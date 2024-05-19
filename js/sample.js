@@ -131,6 +131,7 @@ class GameContainer {
     // 마우스 이벤트
     this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
+      console
       if (relativeX > 0 && relativeX < this.canvas.width) {
         this.paddle.x = relativeX - this.paddle.width / 2;
       }
@@ -173,8 +174,6 @@ class GameContainer {
       gameDisplay.updateHearts(0);
       gameDisplay.score = 0;
       gameDisplay.updateScore(0);
-
-      gameDisplay.updateCloset("clothes1-1.png")
     }
   }
 
