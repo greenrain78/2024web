@@ -1,21 +1,74 @@
-class Settings {
+backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
+brickImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 벽돌 이미지
+itemBrickImages = {"addBall": "item.jpg"};
+
+class GameDisplay {
   constructor() {
-    this.hearts = 2; // 생명 == 공이 바닥에 닿으면 하트 감소 == 공 개수 고려
     this.level = 1; // 레벨
-    this.backgroundImg = "../assets/background/img_1.jpg"; // 배경 이미지
-    this.brickImg = "../assets/bricks/img_1.jpg"; // 벽돌 이미지
-    this.itemBrickImg = "../assets/bricks/item.jpg"; // 아이템 이미지 
+    this.hearts = 3; // 생명
+    this.score = 0; // 점수
+    this.isPaused = false; // 일시정지 여부
+    this.backgroundImgIdx = 0; // 배경 이미지 인덱스
+    this.brickImgIdx = 0; // 벽돌 이미지 인덱스
+    this.brickImg = new Image(); // 벽돌 이미지
+    // node
+    this.backgroundNode = $("#background");
+    this.scoreNode = $("#score");
+    this.initListeners();
+  }
+  initListeners() {
+    $("#backgroundBtn1").click(() => {
+      this.updateBackgroundImg(0);
+    });
+    $("#backgroundBtn2").click(() => {
+      this.updateBackgroundImg(1);
+    });
+    $("#backgroundBtn3").click(() => {
+      this.updateBackgroundImg(2);
+    });
+    $("#brickBtn1").click(() => {
+      this.updateBrickImg(0);
+    });
+    $("#brickBtn2").click(() => {
+      this.updateBrickImg(1);
+    });
+    $("#brickBtn3").click(() => {
+      this.updateBrickImg(2);
+    });
+  }
+  updateBackgroundImg(idx) {
+    this.backgroundImgIdx = idx;
+    // 배경 이미지 업데이트
+    this.backgroundNode.css(
+      "background-image",
+      "url(../assets/background/" + backgroundImages[this.backgroundImgIdx] + ")"
+    );
+  }
+  updateBrickImg(idx) {
+    this.brickImgIdx = idx;
+    this.brickImg = new Image();
+    this.brickImg.src = "../assets/bricks/" + brickImages[this.brickImgIdx];
+  }
+  getBrickImg() {
+    // 벽돌 이미지 가져오기
+    return this.brickImg
+  }
+  updateScore(score) {
+    // 점수 업데이트
+    this.score += score;
+    this.scoreNode.text(this.score);
   }
 }
+var gameDisplay = new GameDisplay();
 
 class GameContainer {
-  constructor(canvasId, settings) {
+  constructor(canvasId) {
     // 설정 값
-    this.settings = settings;
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
     // 게임 요소
-    this.gameBoard = new GameBoard(this.settings, this.canvas);
+    
+    this.gameBoard = new GameBoard(this.canvas);
     this.ballList = [new Ball(this.gameBoard.width / 2, this.gameBoard.height - 300), new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
     this.paddle = new Paddle(
       (this.gameBoard.width - 75) / 2,
@@ -23,7 +76,6 @@ class GameContainer {
     );
     this.bricks = [];
     this.collisionManager = new CollisionManager(
-      this.settings,
       this.ballList,
       this.paddle,
       this.bricks,
@@ -31,6 +83,7 @@ class GameContainer {
       this
     );
     // 게임 초기화
+    this.createDisplay();
     this.createBricks();
     this.initListeners();
   }
@@ -46,11 +99,21 @@ class GameContainer {
         this.paddle.x = relativeX - this.paddle.width / 2;
       }
     });
+    // 키보드 이벤트
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        // 스페이스바
+        this.isPaused = !this.isPaused;
+        if (!this.isPaused) {
+          this.loop(); // 재개할 때 루프를 다시 시작
+        }
+      }
+    });
   }
 
   createBricks() {
     // 레벨별 벽돌 생성
-    if (this.settings.level === 1) {
+    if (gameDisplay.level === 1) {
       var rows = 5;
       var columns = 20;
       for (let r = 0; r < rows; r++) {
@@ -58,18 +121,25 @@ class GameContainer {
           var x = c * (75 + 10) + 30;
           var y = r * (75 + 10) + 30;
           if (Math.random() < 0.1) {
-            this.bricks.push(new ItemBrick(x, y, this.settings,"addBall"));
+            this.bricks.push(new ItemBrick(x, y, "addBall"));
           } else {
-            this.bricks.push(new Brick(x, y, this.settings));
+            this.bricks.push(new Brick(x, y));
           }
-          
-          
         }
       }
     }
   }
+  createDisplay() {
+    if (gameDisplay.level === 1) {
+      gameDisplay.updateBackgroundImg(0);
+      gameDisplay.updateBrickImg(0);
+    }
+  }
 
   loop() {
+    if (this.isPaused) {
+      return; // 일시정지 상태이면 루프를 중단
+    }
     // 배경 그리기
     this.gameBoard.draw(this.ctx);
     // 게임 요소 그리기
@@ -84,13 +154,13 @@ class GameContainer {
     this.collisionManager.checkCollisions();
 
     // 게임 오버 체크 및 재귀 호출
-    if (this.settings.hearts > 0) {
+    if (gameDisplay.hearts > 0) {
       requestAnimationFrame(() => this.loop());
-    } else {
-      alert("GAME OVER");
+    } 
+    else {
+      alert("Game Over");
     }
   }
-
   // 공 개수 추가 아이템 
   addBall() {
     var paddlex = this.paddle.x + this.paddle.width/2; 
@@ -100,8 +170,7 @@ class GameContainer {
 }
 
 class GameBoard {
-  constructor(settings, canvas) {
-    this.settings = settings;
+  constructor(canvas) {
     this.canvas = canvas;
     // 전체 화면 크기로 캔버스 크기 조정
     this.canvas.width = window.innerWidth;
@@ -109,12 +178,9 @@ class GameBoard {
     // 캔버스 크기 조정
     this.width = this.canvas.width;
     this.height = this.canvas.height;
-    // 배경 이미지
-    this.backgroundImg = new Image();
-    this.backgroundImg.src = this.settings.backgroundImg;
   }
   draw(ctx) {
-    ctx.drawImage(this.backgroundImg, 0, 0, this.width, this.height);
+    ctx.clearRect(0, 0, this.width, this.height);
   }
 }
 class Ball {
@@ -150,7 +216,7 @@ class Ball {
 
 class Paddle {
   constructor(x, y) {
-    this.width = 75;
+    this.width = 300;
     this.height = 10;
     this.x = x;
     this.y = y;
@@ -166,10 +232,7 @@ class Paddle {
 }
 
 class Brick {
-  constructor(x, y, settings) {
-    this.settings = settings;
-    this.img = new Image();
-    this.img.src = this.settings.brickImg;
+  constructor(x, y) {
     this.width = 75;
     this.height = 75;
     this.x = x;
@@ -179,35 +242,36 @@ class Brick {
 
   draw(ctx) {
     // 안깨진 벽돌만 그리기
+    var img = gameDisplay.getBrickImg();
     if (this.status === 1) {
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-      // ctx.beginPath();
-      // ctx.rect(this.x, this.y, this.width, this.height);
-      // ctx.fillStyle = "#0095DD";
-      // ctx.fill();
-      // ctx.closePath();
+      ctx.drawImage(img, this.x, this.y, this.width, this.height);
     }
   }
 }
-
 class ItemBrick extends Brick {
-  constructor(x,y,settings,effect) {
-    super(x,y,settings);
-    this.img.src= this.settings.itemBrickImg;
+  constructor(x, y, effect) {
+    super(x, y);
+    this.img = new Image();
+    this.img.src= "../assets/bricks/" + itemBrickImages[effect];
     this.effect = effect; //아이템 이름  
   }
-
+  draw(ctx) {
+    // 아이템 벽돌 그리기
+    super.draw(ctx);
+    if (this.status === 1) {
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+  }
   applyEffect(game) {
     // 아이템1. 공 개수 추가 
+    console.log(this.effect);
     if (this.effect === "addBall") {
       game.addBall();
     }
   }
 }
-
 class CollisionManager {
-  constructor(settings, ballList, paddle, bricks, gameBoard, gameContainer) {
-    this.settings = settings;
+  constructor(ballList, paddle, bricks, gameBoard, gameContainer) {
     this.ballList = ballList;
     this.paddle = paddle;
     this.bricks = bricks;
@@ -230,7 +294,7 @@ class CollisionManager {
   checkGameOver(ball) {
     // 게임 오버 체크
     if(ball.y > this.gameBoard.height) {
-      this.settings.hearts--;
+      gameDisplay.hearts--;
     }
   }
   checkWallCollision(ball) {
@@ -265,6 +329,7 @@ class CollisionManager {
         if (this.isRectCollision(ball, brick)) {
           ball.bounceY();
           brick.status = 0;
+          gameDisplay.updateScore(10);
           if (brick instanceof ItemBrick) {
             brick.applyEffect(this.gameContainer);
           }
@@ -288,7 +353,6 @@ class CollisionManager {
 
 $(document).ready(function () {
   // 게임 시작
-  var settings = new Settings();
-  let game = new GameContainer("gameCanvas", settings);
+  let game = new GameContainer("gameCanvas");
   game.run();
 });
