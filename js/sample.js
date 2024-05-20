@@ -101,7 +101,7 @@ class GameContainer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
     // 게임 요소
-    
+    this.cursor = new Cursor();
     this.gameBoard = new GameBoard(this.canvas);
     this.ballList = [new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
     this.itemList = [];
@@ -131,10 +131,10 @@ class GameContainer {
     // 마우스 이벤트
     this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
-      console
       if (relativeX > 0 && relativeX < this.canvas.width) {
         this.paddle.x = relativeX - this.paddle.width / 2;
       }
+      this.cursor.move(event.clientX, event.clientY);
     });
     // 키보드 이벤트
     document.addEventListener("keydown", (event) => {
@@ -194,6 +194,7 @@ class GameContainer {
     this.itemList.forEach((item) => {
       item.draw(this.ctx);
     });
+    this.cursor.draw(this.ctx);
     // 충돌 체크
     this.collisionManager.checkCollisions();
 
@@ -211,6 +212,26 @@ class GameContainer {
     var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
     gameDisplay.updateHearts(1);
     this.ballList.push(new Ball(paddlex, paddley));
+  }
+}
+class Cursor {
+  constructor() {
+    this.x = 0;
+    this.y = 0;
+    this.radius = 50;
+  }
+  move(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#0095DD";
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.closePath();
   }
 }
 
@@ -410,7 +431,7 @@ class CollisionManager {
       if (this.isPaddleCollision(ball)){
         ball.bounceY();
       }
-      
+      this.checkCursorCollision(ball);
       this.checkBrickCollisions(ball);
       // 게임 오버 체크
       this.checkGameOver(ball);
@@ -447,7 +468,17 @@ class CollisionManager {
       ball.bounceY();
     }
   }
-
+  checkCursorCollision(ball) {
+    // 커서와 충돌 체크
+    if (
+      ball.x > this.gameContainer.cursor.x - this.gameContainer.cursor.radius &&
+      ball.x < this.gameContainer.cursor.x + this.gameContainer.cursor.radius &&
+      ball.y > this.gameContainer.cursor.y - this.gameContainer.cursor.radius &&
+      ball.y < this.gameContainer.cursor.y + this.gameContainer.cursor.radius
+    ) {
+      ball.bounceY();
+    }
+  }
   isPaddleCollision(obj) {
     // 패들과 충돌 체크
     if (
@@ -465,7 +496,6 @@ class CollisionManager {
       return true;
     }
   }
-
   checkBrickCollisions(ball) {
     // 벽돌과 충돌 체크
     this.bricks.forEach((brick) => {
