@@ -1,9 +1,25 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
 brickImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 벽돌 이미지
-itemEffectImages = {"addBall": "item.jpg"}; // 아이템 이미지 
-clothImages = [["clothes1-1.png","clothes1-2.png","clothes1-3.png","clothes1-4.png"],
-["clothes2-1.png","clothes2-2.png","clothes2-3.png","clothes2-4.png","clothes2-5.png","clothes2-6.png"],
-["clothes3-1.png","clothes3-2.png","clothes3-3.png","clothes3-4.png","clothes3-5.png","clothes3-6.png"]];
+itemEffectImages = { addBall: "item.jpg" }; // 아이템 이미지
+clothImages = [
+  ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
+  [
+    "clothes2-1.png",
+    "clothes2-2.png",
+    "clothes2-3.png",
+    "clothes2-4.png",
+    "clothes2-5.png",
+    "clothes2-6.png",
+  ],
+  [
+    "clothes3-1.png",
+    "clothes3-2.png",
+    "clothes3-3.png",
+    "clothes3-4.png",
+    "clothes3-5.png",
+    "clothes3-6.png",
+  ],
+];
 
 class GameDisplay {
   constructor() {
@@ -48,7 +64,9 @@ class GameDisplay {
     // 배경 이미지 업데이트
     this.backgroundNode.css(
       "background-image",
-      "url(../assets/background/" + backgroundImages[this.backgroundImgIdx] + ")"
+      "url(../assets/background/" +
+        backgroundImages[this.backgroundImgIdx] +
+        ")"
     );
   }
   updateBrickImg(idx) {
@@ -58,7 +76,7 @@ class GameDisplay {
   }
   getBrickImg() {
     // 벽돌 이미지 가져오기
-    return this.brickImg
+    return this.brickImg;
   }
   updateScore(score) {
     // 점수 업데이트
@@ -101,9 +119,11 @@ class GameContainer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
     // 게임 요소
-    
+    this.cursor = new Cursor();
     this.gameBoard = new GameBoard(this.canvas);
-    this.ballList = [new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30)];
+    this.ballList = [
+      new Ball(this.gameBoard.width / 3, this.gameBoard.height - 30),
+    ];
     this.itemList = [];
     this.paddle = new Paddle(
       (this.gameBoard.width - 75) / 2,
@@ -131,10 +151,10 @@ class GameContainer {
     // 마우스 이벤트
     this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
-      console
       if (relativeX > 0 && relativeX < this.canvas.width) {
         this.paddle.x = relativeX - this.paddle.width / 2;
       }
+      this.cursor.move(event.clientX, event.clientY);
     });
     // 키보드 이벤트
     document.addEventListener("keydown", (event) => {
@@ -194,23 +214,43 @@ class GameContainer {
     this.itemList.forEach((item) => {
       item.draw(this.ctx);
     });
+    this.cursor.draw(this.ctx);
     // 충돌 체크
     this.collisionManager.checkCollisions();
 
     // 게임 오버 체크 및 재귀 호출
     if (gameDisplay.hearts > 0) {
       requestAnimationFrame(() => this.loop());
-    } 
-    else {
+    } else {
       alert("Game Over");
     }
   }
-  // 공 개수 추가 아이템 
+  // 공 개수 추가 아이템
   addBall() {
-    var paddlex = this.paddle.x + this.paddle.width/2; 
-    var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록 
+    var paddlex = this.paddle.x + this.paddle.width / 2;
+    var paddley = this.paddle.y - 10; // 공이 패들 약간 위에서 생성되도록
     gameDisplay.updateHearts(1);
     this.ballList.push(new Ball(paddlex, paddley));
+  }
+}
+class Cursor {
+  constructor() {
+    this.x = 0;
+    this.y = 0;
+    this.radius = 50;
+  }
+  move(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#0095DD";
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.closePath();
   }
 }
 
@@ -297,8 +337,8 @@ class ItemBrick extends Brick {
   constructor(x, y, effect) {
     super(x, y);
     this.img = new Image();
-    this.img.src= "../assets/bricks/" + itemEffectImages[effect];
-    this.effect = effect; //아이템 이름  
+    this.img.src = "../assets/bricks/" + itemEffectImages[effect];
+    this.effect = effect; //아이템 이름
   }
 
   draw(ctx) {
@@ -308,17 +348,16 @@ class ItemBrick extends Brick {
       // 아이템 이미지를 작게 그림
       ctx.drawImage(
         this.img,
-        this.x + this.width / 4, 
-        this.y + this.height / 4, 
-        this.width / 2, 
-        this.height / 2 
+        this.x + this.width / 4,
+        this.y + this.height / 4,
+        this.width / 2,
+        this.height / 2
       );
     }
-    
   }
 
   applyEffect(game) {
-    // 아이템1. 공 개수 추가    
+    // 아이템1. 공 개수 추가
     game.itemList.push(new EffectItem(this.x, this.y, this.effect));
   }
 }
@@ -327,9 +366,9 @@ class ClothBrick extends Brick {
   constructor(x, y) {
     super(x, y);
     this.img = new Image();
-    var levelcloth = clothImages[gameDisplay.level-1];
-    this.cloth = levelcloth[Math.floor(Math.random()*levelcloth.length)]
-    this.img.src= "../assets/"+ this.cloth;
+    var levelcloth = clothImages[gameDisplay.level - 1];
+    this.cloth = levelcloth[Math.floor(Math.random() * levelcloth.length)];
+    this.img.src = "../assets/" + this.cloth;
   }
 
   draw(ctx) {
@@ -339,10 +378,10 @@ class ClothBrick extends Brick {
       // 아이템 이미지를 작게 그림
       ctx.drawImage(
         this.img,
-        this.x + this.width / 4, 
-        this.y + this.height / 4, 
-        this.width / 2, 
-        this.height / 2 
+        this.x + this.width / 4,
+        this.y + this.height / 4,
+        this.width / 2,
+        this.height / 2
       );
     }
   }
@@ -407,10 +446,10 @@ class CollisionManager {
     // 충돌 체크
     this.ballList.forEach((ball) => {
       this.checkWallCollision(ball);
-      if (this.isPaddleCollision(ball)){
+      if (this.isPaddleCollision(ball)) {
         ball.bounceY();
       }
-      
+      this.checkCursorCollision(ball);
       this.checkBrickCollisions(ball);
       // 게임 오버 체크
       this.checkGameOver(ball);
@@ -418,7 +457,7 @@ class CollisionManager {
       ball.move();
     });
     this.itemList.forEach((item) => {
-      if (this.isPaddleCollision(item)){
+      if (this.isPaddleCollision(item)) {
         this.itemList.splice(this.itemList.indexOf(item), 1); // 아이템 제거
         item.evnet(this.gameContainer);
       }
@@ -430,8 +469,11 @@ class CollisionManager {
   }
   checkGameOver(ball) {
     // 게임 오버 체크
-    if(this.isOutOfGameBoard(ball)) {
-      this.gameContainer.ballList.splice(this.gameContainer.ballList.indexOf(ball), 1); // 공 제거
+    if (this.isOutOfGameBoard(ball)) {
+      this.gameContainer.ballList.splice(
+        this.gameContainer.ballList.indexOf(ball),
+        1
+      ); // 공 제거
       gameDisplay.updateHearts(-1); // 생명 감소
     }
   }
@@ -447,14 +489,36 @@ class CollisionManager {
       ball.bounceY();
     }
   }
+  checkCursorCollision(ball) {
+    // 커서와 충돌 체크
+    // 커서와의 충돌 체크
+  const distanceX = ball.x - this.gameContainer.cursor.x;
+  const distanceY = ball.y - this.gameContainer.cursor.y;
+  const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
+  if (distance < this.gameContainer.cursor.radius) {
+    // 공이 커서 반경 내에 있는 경우
+    const weight = (this.gameContainer.cursor.radius - distance) / this.gameContainer.cursor.radius;
+
+    // 공이 커서 중심으로 빨려들어가는 효과 적용
+    ball.dx += -distanceX * weight * 0.05; // x 방향 휘어짐 가중치
+    ball.dy += -distanceY * weight * 0.05; // y 방향 휘어짐 가중치
+
+    // 공의 속도가 너무 빨라지지 않도록 제한
+    const maxSpeed = 10;
+    const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+    if (speed > maxSpeed) {
+      ball.dx *= maxSpeed / speed;
+      ball.dy *= maxSpeed / speed;
+    }
+  }
+  }
   isPaddleCollision(obj) {
     // 패들과 충돌 체크
     if (
       obj.x > this.paddle.x &&
       obj.x < this.paddle.x + this.paddle.width &&
-      obj.y + obj.dy >
-        this.gameBoard.height - this.paddle.height - obj.radius
+      obj.y + obj.dy > this.gameBoard.height - this.paddle.height - obj.radius
     ) {
       return true;
     }
@@ -465,7 +529,6 @@ class CollisionManager {
       return true;
     }
   }
-
   checkBrickCollisions(ball) {
     // 벽돌과 충돌 체크
     this.bricks.forEach((brick) => {
