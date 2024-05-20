@@ -456,7 +456,9 @@ class CollisionManager {
     this.ballList.forEach((ball) => {
       this.checkWallCollision(ball);
       if (this.isPaddleCollision(ball)) {
-        ball.bounceY();
+        if (ball.dy > 0) {  // 공이 아래로 떨어지는 경우에만 반사
+          ball.bounceY(); 
+        }
       }
       this.checkCursorCollision(ball);
       this.checkBrickCollisions(ball);
