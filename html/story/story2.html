@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./story2.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <!-- 옷장 움직이는 애니메이션 -->
+    <div class="closet">
+      <img class="door" id="closet_left" />
+      <img class="door" id="closet_right" />
+    </div>
+    <button id="btn">Open</button>
+    <script>
+      $("#btn").click(function () {
+        $("#closet_left").css({ transform: "rotateY(-180deg)" });
+        $("#closet_right").css({ transform: "rotateY(180deg)" });
+      });
+    </script>
+  </body>
+</html>

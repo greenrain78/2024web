@@ -1,0 +1,22 @@
+body {
+  background-color: #bc7fcd;
+}
+#partyselect_logo {
+  width: 400px;
+  height: 350px;
+}
+
+.partyPic {
+  width: 360px;
+  height: 370px;
+  margin: 0 30px;
+}
+.partyPic:hover {
+  width: 400px;
+  height: 420px;
+}
+.selection {
+  width: 100px;
+  height: 50px;
+  margin: 0 150px 0 150px;
+}

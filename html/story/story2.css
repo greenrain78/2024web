@@ -1,0 +1,33 @@
+body {
+  background-color: #ffdada;
+}
+.closet {
+  margin: 200px 400px 0 400px;
+  position: relative;
+  width: 300px;
+  height: 500px;
+  background-size: cover;
+  background: url("./closet_body.png") no-repeat center center;
+}
+#closet_left {
+  left: 0;
+  transform-origin: left;
+  background-size: cover;
+}
+#closet_right {
+  right: 0;
+  transform-origin: right;
+  background-size: cover;
+}
+.door {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: url("./closet_left.png") no-repeat;
+  transition: transform 3s ease; /* 변화가 일어날 때 부드럽게 이루어지도록 설정 */
+  background-size: cover;
+}
+#btn {
+  margin: 0 580px;
+}
