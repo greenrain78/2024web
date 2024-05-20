@@ -51,14 +51,14 @@ class GameDisplay {
     $("#backgroundBtn3").click(() => {
       this.updateBackgroundImg(2);
     });
-    $("#brickBtn1").click(() => {
-      this.updateBrickImg(0);
+    $("#ballBtn1").click(() => {
+      this.updateBallImg(0);
     });
-    $("#brickBtn2").click(() => {
-      this.updateBrickImg(1);
+    $("#ballBtn2").click(() => {
+      this.updateBallImg(1);
     });
-    $("#brickBtn3").click(() => {
-      this.updateBrickImg(2);
+    $("#ballBtn3").click(() => {
+      this.updateBallImg(2);
     });
   }
   updateBackgroundImg(idx) {
@@ -291,7 +291,6 @@ class Ball {
 
   draw(ctx) {
     var img = gameDisplay.getBallImg();
-    console.log(img);
     ctx.drawImage(img, this.x, this.y, this.radius, this.radius);
   }
 
