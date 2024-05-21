@@ -20,7 +20,7 @@ clothImages = [
     "clothes3-6.png",
   ],
 ];
-
+ballImages = ["ball1.png", "ball2.png", "ball3.png"]; // 공 이미지
 class GameDisplay {
   constructor() {
     this.level = 1; // 레벨
@@ -30,6 +30,8 @@ class GameDisplay {
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
     this.brickImg = new Image(); // 벽돌 이미지
+    this.ballImgIdx = 0; // 공 이미지 인덱스
+    this.ballImg = new Image(); // 공 이미지
     this.closetList = []; // 옷 이미지
     // node
     this.backgroundNode = $("#background");
@@ -49,14 +51,14 @@ class GameDisplay {
     $("#backgroundBtn3").click(() => {
       this.updateBackgroundImg(2);
     });
-    $("#brickBtn1").click(() => {
-      this.updateBrickImg(0);
+    $("#ballBtn1").click(() => {
+      this.updateBallImg(0);
     });
-    $("#brickBtn2").click(() => {
-      this.updateBrickImg(1);
+    $("#ballBtn2").click(() => {
+      this.updateBallImg(1);
     });
-    $("#brickBtn3").click(() => {
-      this.updateBrickImg(2);
+    $("#ballBtn3").click(() => {
+      this.updateBallImg(2);
     });
   }
   updateBackgroundImg(idx) {
@@ -77,6 +79,15 @@ class GameDisplay {
   getBrickImg() {
     // 벽돌 이미지 가져오기
     return this.brickImg;
+  }
+  updateBallImg(idx) {
+    this.ballImgIdx = idx;
+    this.ballImg = new Image();
+    this.ballImg.src = "../assets/ball/" + ballImages[this.ballImgIdx];
+  }
+  getBallImg() {
+    // 공 이미지 가져오기
+    return this.ballImg;
   }
   updateScore(score) {
     // 점수 업데이트
@@ -190,6 +201,7 @@ class GameContainer {
     if (gameDisplay.level === 1) {
       gameDisplay.updateBackgroundImg(0);
       gameDisplay.updateBrickImg(0);
+      gameDisplay.updateBallImg(0);
       gameDisplay.hearts = 1;
       gameDisplay.updateHearts(0);
       gameDisplay.score = 0;
@@ -274,15 +286,12 @@ class Ball {
     this.y = y;
     this.dx = 8;
     this.dy = -8;
-    this.radius = 10;
+    this.radius = 50;
   }
 
   draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    var img = gameDisplay.getBallImg();
+    ctx.drawImage(img, this.x, this.y, this.radius, this.radius);
   }
 
   move() {
@@ -447,7 +456,9 @@ class CollisionManager {
     this.ballList.forEach((ball) => {
       this.checkWallCollision(ball);
       if (this.isPaddleCollision(ball)) {
-        ball.bounceY();
+        if (ball.dy > 0) {  // 공이 아래로 떨어지는 경우에만 반사
+          ball.bounceY(); 
+        }
       }
       this.checkCursorCollision(ball);
       this.checkBrickCollisions(ball);
