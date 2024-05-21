@@ -121,6 +121,10 @@ class GameDisplay {
       this.closetListNode.append(img);
     });
   }
+  resetCloset() {
+    this.closetList = [];
+    this.closetListNode.html("");
+  }
 }
 var gameDisplay = new GameDisplay();
 
@@ -182,6 +186,34 @@ class GameContainer {
   createBricks() {
     // 레벨별 벽돌 생성
     if (gameDisplay.level === 1) {
+      var rows = 3;
+      var columns = 10;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+          var x = c * (75 + 10) + 30;
+          var y = r * (75 + 10) + 30;
+          if (Math.random() < 0.1) {
+            this.bricks.push(new ItemBrick(x, y, "addBall"));
+          } else {
+            this.bricks.push(new ClothBrick(x, y));
+          }
+        }
+      }
+    }else if (gameDisplay.level === 2) {
+      var rows = 4;
+      var columns = 15;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+          var x = c * (75 + 10) + 30;
+          var y = r * (75 + 10) + 30;
+          if (Math.random() < 0.1) {
+            this.bricks.push(new ItemBrick(x, y, "addBall"));
+          } else {
+            this.bricks.push(new ClothBrick(x, y));
+          }
+        }
+      }
+    } else if (gameDisplay.level === 3) {
       var rows = 5;
       var columns = 20;
       for (let r = 0; r < rows; r++) {
@@ -198,10 +230,28 @@ class GameContainer {
     }
   }
   createDisplay() {
+    gameDisplay.resetCloset();
+
     if (gameDisplay.level === 1) {
       gameDisplay.updateBackgroundImg(0);
       gameDisplay.updateBrickImg(0);
       gameDisplay.updateBallImg(0);
+      gameDisplay.hearts = 1;
+      gameDisplay.updateHearts(0);
+      gameDisplay.score = 0;
+      gameDisplay.updateScore(0);
+    } else if (gameDisplay.level === 2) {
+      gameDisplay.updateBackgroundImg(1);
+      gameDisplay.updateBrickImg(1);
+      gameDisplay.updateBallImg(1);
+      gameDisplay.hearts = 1;
+      gameDisplay.updateHearts(0);
+      gameDisplay.score = 0;
+      gameDisplay.updateScore(0);
+    } else if (gameDisplay.level === 3) {
+      gameDisplay.updateBackgroundImg(2);
+      gameDisplay.updateBrickImg(2);
+      gameDisplay.updateBallImg(2);
       gameDisplay.hearts = 1;
       gameDisplay.updateHearts(0);
       gameDisplay.score = 0;
@@ -286,6 +336,8 @@ class Ball {
     this.y = y;
     this.dx = 8;
     this.dy = -8;
+    this.maxSpeed = 12;
+    this.minSpeed = 8;
     this.radius = 50;
   }
 
@@ -306,6 +358,29 @@ class Ball {
   bounceY() {
     this.dy = -this.dy;
   }
+  limitSpeed() {
+    // console.log(this.dx, this.dy);
+    // if (this.dx > this.maxSpeed) {
+    //   this.dx = this.maxSpeed;
+    // } else if (this.dx < -this.maxSpeed && this.dx < 0) {
+    //   this.dx = -this.maxSpeed;
+    // } else if (this.dx < this.minSpeed) {
+    //   this.dx = this.minSpeed;
+    // } else if (this.dx > -this.minSpeed && this.dx < 0) {
+    //   this.dx = -this.minSpeed;
+    // }
+
+    // if (this.dy > this.maxSpeed) {
+    //   this.dy = this.maxSpeed;
+    // } else if (this.dy < -this.maxSpeed && this.dy < 0) {
+    //   this.dy = -this.maxSpeed;
+    // } else if (this.dy < this.minSpeed) {
+    //   this.dy = this.minSpeed;
+    // } else if (this.dy > -this.minSpeed && this.dy < 0) {
+    //   this.dy = -this.minSpeed;
+    // }
+    // console.log(this.dx, this.dy);
+  } 
 }
 
 class Paddle {
@@ -456,8 +531,9 @@ class CollisionManager {
     this.ballList.forEach((ball) => {
       this.checkWallCollision(ball);
       if (this.isPaddleCollision(ball)) {
-        if (ball.dy > 0) {  // 공이 아래로 떨어지는 경우에만 반사
-          ball.bounceY(); 
+        if (ball.dy > 0) {
+          // 공이 아래로 떨어지는 경우에만 반사
+          ball.bounceY();
         }
       }
       this.checkCursorCollision(ball);
@@ -503,26 +579,23 @@ class CollisionManager {
   checkCursorCollision(ball) {
     // 커서와 충돌 체크
     // 커서와의 충돌 체크
-  const distanceX = ball.x - this.gameContainer.cursor.x;
-  const distanceY = ball.y - this.gameContainer.cursor.y;
-  const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    const distanceX = ball.x - this.gameContainer.cursor.x;
+    const distanceY = ball.y - this.gameContainer.cursor.y;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
 
-  if (distance < this.gameContainer.cursor.radius) {
-    // 공이 커서 반경 내에 있는 경우
-    const weight = (this.gameContainer.cursor.radius - distance) / this.gameContainer.cursor.radius;
+    if (distance < this.gameContainer.cursor.radius) {
+      // 공이 커서 반경 내에 있는 경우
+      const weight =
+        (this.gameContainer.cursor.radius - distance) /
+        this.gameContainer.cursor.radius;
 
-    // 공이 커서 중심으로 빨려들어가는 효과 적용
-    ball.dx += -distanceX * weight * 0.05; // x 방향 휘어짐 가중치
-    ball.dy += -distanceY * weight * 0.05; // y 방향 휘어짐 가중치
+      // 공이 커서 중심으로 빨려들어가는 효과 적용
+      ball.dx += -distanceX * weight * 0.05; // x 방향 휘어짐 가중치
+      ball.dy += -distanceY * weight * 0.05; // y 방향 휘어짐 가중치
 
-    // 공의 속도가 너무 빨라지지 않도록 제한
-    const maxSpeed = 10;
-    const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
-    if (speed > maxSpeed) {
-      ball.dx *= maxSpeed / speed;
-      ball.dy *= maxSpeed / speed;
+      // 공의 속도가 너무 빨라지지 않도록 제한
+      ball.limitSpeed();
     }
-  }
   }
   isPaddleCollision(obj) {
     // 패들과 충돌 체크
@@ -575,7 +648,29 @@ class CollisionManager {
 
 $(document).ready(function () {
   // 게임 시작
+  var game;
+  $("#levelBtn1").click(() => {
+    gameDisplay.updateLevel(1);
+    game.isPaused = true; 
+    game = new GameContainer("gameCanvas");
+    game.run();
+  });
+  $("#levelBtn2").click(() => {
+    gameDisplay.updateLevel(2);
+    game.isPaused = true; 
+    game = new GameContainer("gameCanvas");
+    game.run();
+  });
+  $("#levelBtn3").click(() => {
+    gameDisplay.updateLevel(3);
+    game.isPaused = true; 
+    game = new GameContainer("gameCanvas");
+    game.run();
+  });
+  
   gameDisplay.updateLevel(1);
-  let game = new GameContainer("gameCanvas");
+  game = new GameContainer("gameCanvas");
   game.run();
+  
+  
 });
