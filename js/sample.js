@@ -336,8 +336,8 @@ class Ball {
     this.y = y;
     this.dx = 8;
     this.dy = -8;
-    this.maxSpeed = 12;
-    this.minSpeed = 8;
+    this.maxSpeed = 15;
+    this.minSpeed = 5;
     this.radius = 50;
   }
 
@@ -359,27 +359,35 @@ class Ball {
     this.dy = -this.dy;
   }
   limitSpeed() {
-    // console.log(this.dx, this.dy);
-    // if (this.dx > this.maxSpeed) {
-    //   this.dx = this.maxSpeed;
-    // } else if (this.dx < -this.maxSpeed && this.dx < 0) {
-    //   this.dx = -this.maxSpeed;
-    // } else if (this.dx < this.minSpeed) {
-    //   this.dx = this.minSpeed;
-    // } else if (this.dx > -this.minSpeed && this.dx < 0) {
-    //   this.dx = -this.minSpeed;
-    // }
+    console.log(this.dx, this.dy);
+    if (this.dx > this.maxSpeed) {
+      console.log("dx > maxSpeed")
+      this.dx = this.maxSpeed;
+    } else if (this.dx < -this.maxSpeed && this.dx < 0) {
+      console.log("dx < -maxSpeed")
+      this.dx = -this.maxSpeed;
+    } else if (this.dx < this.minSpeed && this.dx > 0) {
+      console.log("dx < minSpeed")
+      this.dx = this.minSpeed;
+    } else if (this.dx > -this.minSpeed && this.dx < 0) {
+      console.log("dx > -minSpeed")
+      this.dx = -this.minSpeed;
+    }
 
-    // if (this.dy > this.maxSpeed) {
-    //   this.dy = this.maxSpeed;
-    // } else if (this.dy < -this.maxSpeed && this.dy < 0) {
-    //   this.dy = -this.maxSpeed;
-    // } else if (this.dy < this.minSpeed) {
-    //   this.dy = this.minSpeed;
-    // } else if (this.dy > -this.minSpeed && this.dy < 0) {
-    //   this.dy = -this.minSpeed;
-    // }
-    // console.log(this.dx, this.dy);
+    if (this.dy > this.maxSpeed) {
+      console.log("dy > maxSpeed")
+      this.dy = this.maxSpeed;
+    } else if (this.dy < -this.maxSpeed && this.dy < 0) {
+      console.log("dy < -maxSpeed")
+      this.dy = -this.maxSpeed;
+    } else if (this.dy < this.minSpeed && this.dy > 0) {
+      console.log("dy < minSpeed")
+      this.dy = this.minSpeed;
+    } else if (this.dy > -this.minSpeed && this.dy < 0) {
+      console.log("dy > -minSpeed")
+      this.dy = -this.minSpeed;
+    }
+    console.log(this.dx, this.dy);
   } 
 }
 
