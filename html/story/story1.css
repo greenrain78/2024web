@@ -8,19 +8,26 @@ body {
 }
 .all {
   height: 1000px;
+  width: 1300px;
   background-color: #ffcdea;
 }
-.invitePic {
-  width: 400px;
-  height: 250px;
-  margin: 10px 400px 50px 400px;
+#invitePic {
+  width: 550px;
+  height: 350px;
+  margin: 10px 300px 50px 350px;
 }
 #open_invite {
   width: 130px;
   height: 50px;
-  margin: 20px 550px 50px 530px;
+  margin: 20px 550px 50px 555px;
 }
 .message {
   width: 550px;
-  margin: 50px 350px;
+  margin: 30px 350px 20px 350px;
+}
+#next {
+  width: 70px;
+  height: 70px;
+  float: right;
+  margin: 10px 20px 0 0;
 }

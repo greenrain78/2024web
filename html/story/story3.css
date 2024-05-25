@@ -1,13 +1,34 @@
-body {
-  background-color: #ffcdea;
+* {
+  margin: 0;
+  padding: 0;
 }
-.warningPic {
-  width: 400px;
-  height: 250px;
-  margin-bottom: 100px;
+body {
+  width: 1300px;
+  margin: 0 auto;
+}
+.all {
+  height: 1000px;
+  width: 1300px;
+  background-color: #3d3434;
+}
+#warningPic {
+  width: 550px;
+  height: 350px;
+  margin: 10px 300px 30px 350px;
 }
 #open_warning {
   width: 130px;
   height: 50px;
-  margin-left: 200px;
+  margin: 20px 550px 50px 555px;
+}
+.message {
+  width: 450px;
+  margin: 50px 350px 50px 400px;
+}
+#start_game {
+  width: 150px;
+  height: 40px;
+  float: right;
+  margin: 10px 20px 0 0;
+  display: none;
 }

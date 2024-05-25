@@ -4,24 +4,54 @@
     <link rel="stylesheet" href="./story3.css" />
   </head>
   <body>
-    <div>
-      <img class="warningPic" src="./warning1.png" />
+    <div class="all">
+      <div>
+        <!-- 게임 진행 화면 html 링크로 수정해야 함. -->
+        <a href="./story3.html">
+          <img id="start_game" src="./start_game.png" />
+        </a>
+      </div>
+      <div>
+        <img class="message" src="./message3.png" />
+      </div>
+      <div>
+        <img id="warningPic" src="./warning1.png" />
+      </div>
+      <div>
+        <img id="open_warning" src="./open_warning.png" />
+      </div>
     </div>
-    <div>
-      <!-- 편지 열기를 클릭하면 편지 열리는 애니메이션  -->
-      <img id="open_warning" src="./open_warning.png" />
-    </div>
-    <script>
-      const open = document.getElementById("open_invite");
 
-      // 마우스 오버 이벤트 리스너 추가
+    <script>
+      const open = document.getElementById("open_warning");
+
+      // 편지 hover
       open.addEventListener("mouseover", function () {
         this.src = "./open_warning_hover.png";
       });
-
-      // 마우스 아웃 이벤트 리스너 추가
       open.addEventListener("mouseout", function () {
         this.src = "./open_warning.png";
+      });
+
+      // game start hover
+      const start = document.getElementById("start_game");
+      start.addEventListener("mouseover", function () {
+        this.src = "./start_game_hover.png";
+      });
+      start.addEventListener("mouseout", function () {
+        this.src = "./start_game.png";
+      });
+
+      // 클릭 이벤트 리스너 추가
+      const letter = document.getElementById("warningPic");
+      open.addEventListener("click", function () {
+        letter.src = "./warning2.png"; // 첫 번째 이미지로 변경
+        setTimeout(() => {
+          letter.src = "./warning3.png"; // 일정 시간 후 두 번째 이미지로 변경
+        }, 1000); // 1초 (1000밀리초) 후에 변경
+        setTimeout(() => {
+          start.style.display = "block";
+        }, 1000);
       });
     </script>
   </body>

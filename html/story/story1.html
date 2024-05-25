@@ -6,10 +6,15 @@
   <body>
     <div class="all">
       <div>
+        <a href="./story2.html">
+          <img id="next" src="./next.png" />
+        </a>
+      </div>
+      <div>
         <img class="message" src="./message1.png" />
       </div>
       <div>
-        <img class="invitePic" src="./invite1.png" />
+        <img id="invitePic" src="./invite1.png" />
       </div>
       <div>
         <!-- 편지 열리는 애니메이션 추가해야 함 -->
@@ -19,14 +24,30 @@
     <script>
       const open = document.getElementById("open_invite");
 
-      // 마우스 오버 이벤트 리스너 추가
+      // 편지 열기 hover
       open.addEventListener("mouseover", function () {
         this.src = "./open_hover.png";
       });
-
-      // 마우스 아웃 이벤트 리스너 추가
       open.addEventListener("mouseout", function () {
         this.src = "./open_invite.png";
+      });
+
+      // 넘어가기 hover
+      const next = document.getElementById("next");
+      next.addEventListener("mouseover", function () {
+        this.src = "./next_hover.png";
+      });
+      next.addEventListener("mouseout", function () {
+        this.src = "./next.png";
+      });
+
+      // 클릭 이벤트 리스너 추가
+      const letter = document.getElementById("invitePic");
+      open.addEventListener("click", function () {
+        letter.src = "./invite2.png"; // 첫 번째 이미지로 변경
+        setTimeout(() => {
+          letter.src = "./invite3.png"; // 일정 시간 후 두 번째 이미지로 변경
+        }, 1000); // 1초 (1000밀리초) 후에 변경
       });
     </script>
   </body>

@@ -5,11 +5,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
-    <!-- 옷장 움직이는 애니메이션 -->
-    <!-- 배경 이미지로 만들어서 넣어버리기 -->
     <div class="all">
       <div>
-        <img class="message" src="./message2.png" />
+        <a href="./story3.html">
+          <img id="next" src="./next.png" />
+        </a>
       </div>
       <div class="closet">
         <img class="door" id="closet_left" />
@@ -21,6 +21,15 @@
       $("#btn").click(function () {
         $("#closet_left").css({ transform: "rotateY(-180deg)" });
         $("#closet_right").css({ transform: "rotateY(180deg)" });
+      });
+
+      // 넘어가기 hover
+      const next = document.getElementById("next");
+      next.addEventListener("mouseover", function () {
+        this.src = "./next_hover.png";
+      });
+      next.addEventListener("mouseout", function () {
+        this.src = "./next.png";
       });
     </script>
   </body>
