@@ -40,16 +40,29 @@ document.addEventListener('DOMContentLoaded', function() {
         musicOptions.classList.add('hidden');
         ballOptions.classList.add('hidden');
     }
+
+    // localStorage에서 선택된 음악 파일 로드
+    const selectedMusic = localStorage.getItem('selectedMusic');
+    if (selectedMusic) {
+        changeMusic(selectedMusic);
+    }
+
+    // localStorage에서 선택된 공 로드
+    const selectedBall = localStorage.getItem('selectedBall');
+    if (selectedBall) {
+        selectBall(selectedBall);
+    }
 });
 
-// 음악 변경 함수
 function changeMusic(musicFile) {
     const backgroundMusic = document.getElementById('background_music');
     backgroundMusic.src = musicFile;
     backgroundMusic.play();
+    // 선택된 음악 파일을 localStorage에 저장
+    localStorage.setItem('selectedMusic', musicFile);
 }
 
-
+// 공 선택 함수 수정
 function selectBall(ballType) {
     console.log(ballType + ' selected');
     // 모든 공 이미지들의 'selected' 클래스 제거
@@ -58,5 +71,6 @@ function selectBall(ballType) {
     });
     // 선택된 공 이미지에 'selected' 클래스 추가
     document.querySelector(`img[src*="${ballType}"]`).classList.add('selected');
-    // 여기에 선택된 공을 처리하는 추가 코드를 넣으세요.
+    // 선택된 공을 localStorage에 저장
+    localStorage.setItem('selectedBall', ballType);
 }
