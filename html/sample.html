@@ -25,7 +25,7 @@
 
     <canvas id="gameCanvas"></canvas>
     <div id="closet">
-      <img src="../assets/closet.jpg" id="closetImg" />
+      <img src="../assets/closet.png" id="closetImg" />
     </div>
     <div id="clothesList">
       <!-- <img src="../assets/clothes1-1.png" class="clothes">
@@ -36,6 +36,40 @@
         <img src="../assets/clothes1-1.png" class="clothes">
         <img src="../assets/clothes1-1.png" class="clothes"> -->
     </div>
+
+    <div id="settingsScreen" style="display:none;">
+      <!-- 여기에 환경설정 내용을 추가 -->
+      <div id="Setting-screen" class="Screen">
+        <div id="Setting-button">
+            <button id="select_music">음악 선택</button>
+            <button id="select_ball">공 선택</button>
+            <button id="mute_sound">소리 on/off</button>
+            <a href="../html/intro/game1.html">
+                <button id="back">BACK</button>
+            </a>
+        </div>
+
+        <div id="music_options" class="options hidden">
+            <img src="sound_o.png" onclick="changeMusic('../assets/music/backgroundsound1.mp3')">
+            <img src="sound_o.png" onclick="changeMusic('../assets/music/backgroundsound2.mp3')">
+            <img src="sound_o.png" onclick="changeMusic('../assets/music/backgroundsound3.mp3')">
+        </div>
+    
+        <div id="ball_options" class="options hidden">
+            <img src="ball1.png" onclick="selectBall('ball1')">
+            <img src="ball2.png" onclick="selectBall('ball2')">
+            <img src="ball3.png" onclick="selectBall('ball3')">
+        </div>
+    
+        <audio id="background_music" loop>
+            <source src="../assets/music/backgroundsound1.mp3" type="audio/mp3">
+        </audio>
+    </div>
+      <h2>Settings</h2>
+      <button id="resumeBtn">Resume</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+
     <script src="../js/sample.js"></script>
   </body>
 </html>

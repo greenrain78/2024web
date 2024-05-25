@@ -1,5 +1,5 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
-brickImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 벽돌 이미지
+brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
 itemEffectImages = { addBall: "item.jpg" }; // 아이템 이미지
 clothImages = [
   ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
@@ -176,11 +176,29 @@ class GameContainer {
       if (event.code === "Space") {
         // 스페이스바
         this.isPaused = !this.isPaused;
-        if (!this.isPaused) {
+        if (this.isPaused) {
+          this.showSettingsScreen();
+        } else {
+          this.hideSettingsScreen();
           this.loop(); // 재개할 때 루프를 다시 시작
         }
       }
     });
+
+    // Resume 버튼 클릭 이벤트
+    document.getElementById("resumeBtn").addEventListener("click", () => {
+      this.isPaused = false;
+      this.hideSettingsScreen();
+      this.loop(); // 재개할 때 루프를 다시 시작
+    });
+  }
+
+  showSettingsScreen() {
+    document.getElementById("settingsScreen").style.display = "block";
+  }
+
+  hideSettingsScreen() {
+    document.getElementById("settingsScreen").style.display = "none";
   }
 
   createBricks() {
