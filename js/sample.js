@@ -163,7 +163,6 @@ class GameContainer {
     this.loop();
   }
   initListeners() {
-    // 마우스 이벤트
     this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
       if (relativeX > 0 && relativeX < this.canvas.width) {
@@ -171,34 +170,26 @@ class GameContainer {
       }
       this.cursor.move(event.clientX, event.clientY);
     });
-    // 키보드 이벤트
+
     document.addEventListener("keydown", (event) => {
       if (event.code === "Space") {
-        // 스페이스바
         this.isPaused = !this.isPaused;
         if (this.isPaused) {
           this.showSettingsScreen();
         } else {
           this.hideSettingsScreen();
-          this.loop(); // 재개할 때 루프를 다시 시작
+          this.loop();
         }
       }
-    });
-
-    // Resume 버튼 클릭 이벤트
-    document.getElementById("resumeBtn").addEventListener("click", () => {
-      this.isPaused = false;
-      this.hideSettingsScreen();
-      this.loop(); // 재개할 때 루프를 다시 시작
     });
   }
 
   showSettingsScreen() {
-    document.getElementById("settingsScreen").style.display = "block";
+    document.getElementById("buttons").style.display = "block";
   }
 
   hideSettingsScreen() {
-    document.getElementById("settingsScreen").style.display = "none";
+    document.getElementById("buttons").style.display = "none";
   }
 
   createBricks() {

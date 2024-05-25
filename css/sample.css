@@ -25,10 +25,15 @@ canvas {
 }
 #clothesList{
     position: absolute;
-    bottom: 30px;
+    bottom: 0;
+    margin-bottom: 190px;
+    margin-left: 120px;
+    width: 200px;
+    height: 200px;
     left: 0;
     z-index: -5;
 }
+
 #closet {
     position: absolute;
     bottom: 0;
@@ -40,6 +45,24 @@ canvas {
 }
 
 #closetImg {
-    width: 300px;
+    width: 440px;
     height: auto;
+}
+
+#buttons {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#buttons button {
+    display: block;
+    margin: 10px 0;
 }
