@@ -101,7 +101,12 @@ class GameDisplay {
   }
   updateLevel(level) {
     // 레벨 업데이트
-    this.level = level;
+    if ( level >= 1 && level <= 3) {
+      this.level = level;
+    } else {
+      alert("레벨은 1~3까지만 가능합니다.\n레벨을 1로 설정합니다.");
+      this.level = 1;
+    }
     this.levelNode.text(`Level: ${this.level}`);
   }
   updateCloset(clothes) {
@@ -675,8 +680,8 @@ $(document).ready(function () {
     game = new GameContainer("gameCanvas");
     game.run();
   });
-  
-  gameDisplay.updateLevel(1);
+  const urlParams = new URLSearchParams(window.location.search);
+  gameDisplay.updateLevel(parseInt(urlParams.get("level")));
   game = new GameContainer("gameCanvas");
   game.run();
   
