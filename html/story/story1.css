@@ -1,13 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 body {
+  width: 1300px;
+  margin: 0 auto;
+}
+.all {
+  height: 1000px;
   background-color: #ffcdea;
 }
 .invitePic {
   width: 400px;
   height: 250px;
-  margin-bottom: 100px;
+  margin: 10px 400px 50px 400px;
 }
 #open_invite {
   width: 130px;
   height: 50px;
-  margin-left: 200px;
+  margin: 20px 550px 50px 530px;
+}
+.message {
+  width: 550px;
+  margin: 50px 350px;
 }

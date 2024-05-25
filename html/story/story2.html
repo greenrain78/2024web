@@ -6,11 +6,17 @@
   </head>
   <body>
     <!-- 옷장 움직이는 애니메이션 -->
-    <div class="closet">
-      <img class="door" id="closet_left" />
-      <img class="door" id="closet_right" />
+    <!-- 배경 이미지로 만들어서 넣어버리기 -->
+    <div class="all">
+      <div>
+        <img class="message" src="./message2.png" />
+      </div>
+      <div class="closet">
+        <img class="door" id="closet_left" />
+        <img class="door" id="closet_right" />
+      </div>
+      <button id="btn">옷장 열기</button>
     </div>
-    <button id="btn">Open</button>
     <script>
       $("#btn").click(function () {
         $("#closet_left").css({ transform: "rotateY(-180deg)" });

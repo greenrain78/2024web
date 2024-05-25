@@ -1,8 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 body {
+  width: 1300px;
+  margin: 0 auto;
+}
+.all {
+  height: 1000px;
+  width: 1300px;
   background-color: #ffdada;
+  position: fixed;
 }
 .closet {
-  margin: 200px 400px 0 400px;
+  margin: 20px 400px 0 500px;
   position: relative;
   width: 300px;
   height: 500px;
@@ -28,6 +39,12 @@ body {
   transition: transform 3s ease; /* 변화가 일어날 때 부드럽게 이루어지도록 설정 */
   background-size: cover;
 }
+.message {
+  width: 450px;
+  margin: 80px 450px 50px 450px;
+}
 #btn {
-  margin: 0 580px;
+  margin: 50px 500px 50px 600px;
+  width: 100px;
+  height: 40px;
 }
