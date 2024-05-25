@@ -34,10 +34,10 @@ body {
 .closet {
   margin: 345px 350px 50px 490px;
 }
-#btn {
+#open_closet {
   margin: 50px 500px 50px 600px;
-  width: 100px;
-  height: 40px;
+  width: 130px;
+  height: 50px;
 }
 #next {
   width: 70px;

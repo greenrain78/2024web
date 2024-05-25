@@ -15,10 +15,12 @@
         <img class="door" id="closet_left" />
         <img class="door" id="closet_right" />
       </div>
-      <button id="btn">옷장 열기</button>
+      <div>
+        <img id="open_closet" src="./open_closet.png" />
+      </div>
     </div>
     <script>
-      $("#btn").click(function () {
+      $("#open_closet").click(function () {
         $("#closet_left").css({ transform: "rotateY(-180deg)" });
         $("#closet_right").css({ transform: "rotateY(180deg)" });
       });
@@ -30,6 +32,15 @@
       });
       next.addEventListener("mouseout", function () {
         this.src = "./next.png";
+      });
+
+      // 옷장 열기 hover
+      const open = document.getElementById("open_closet");
+      open.addEventListener("mouseover", function () {
+        this.src = "./open_closet_hover.png";
+      });
+      open.addEventListener("mouseout", function () {
+        this.src = "./open_closet.png";
       });
     </script>
   </body>

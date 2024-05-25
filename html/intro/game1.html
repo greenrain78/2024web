@@ -7,12 +7,20 @@
     <div class="first">
       <!-- 첫 화면 -->
       <div>
-        <img id="start_logo" src="start_logo.png" />
+        <a href="../story/story1.html">
+          <img id="start_logo" src="start_logo.png" />
+        </a>
         <img id="exit_logo" src="exit_logo.png" />
       </div>
       <div>
         <img id="setting_logo" src="setting_logo.png" />
       </div>
     </div>
+    <script>
+      const exit = document.getElementById("exit_logo");
+      exit.addEventListener("click", function () {
+        window.close();
+      });
+    </script>
   </body>
 </html>
