@@ -6,17 +6,12 @@ body {
   width: 1300px;
   margin: 0 auto;
 }
-#start_logo,
-#exit_logo {
+#start_logo {
   width: 280px;
   height: 160px;
   float: right;
   margin-top: 700px;
-  margin-right: 30px;
-}
-#exit_logo:hover {
-  width: 300px;
-  height: 180px;
+  margin-right: 80px;
 }
 #start_logo:hover {
   width: 300px;
