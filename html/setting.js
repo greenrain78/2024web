@@ -49,8 +49,14 @@ function changeMusic(musicFile) {
     backgroundMusic.play();
 }
 
-// 공 선택 함수
+
 function selectBall(ballType) {
     console.log(ballType + ' selected');
-    // 여기에 선택된 공을 처리하는 코드를 추가하세요.
+    // 모든 공 이미지들의 'selected' 클래스 제거
+    document.querySelectorAll('#ball_options img').forEach(img => {
+        img.classList.remove('selected');
+    });
+    // 선택된 공 이미지에 'selected' 클래스 추가
+    document.querySelector(`img[src*="${ballType}"]`).classList.add('selected');
+    // 여기에 선택된 공을 처리하는 추가 코드를 넣으세요.
 }

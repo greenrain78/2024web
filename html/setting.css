@@ -63,14 +63,33 @@ body {
     margin-left: 50px;
     margin-right: 50px;
   }
+
+  #ball_options{
+    margin-top: 180px;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
   
   .hidden {
       display: none;
   }
-  
-  .options img {
-      width: 100px;
-      height: 100px;
-      margin: 10px;
-      cursor: pointer;
-  }
+
+  /* sound_o.png 및 ball 이미지들의 크기 조정 및 가운데 정렬 */
+.options img {
+    width: 200px; /* 이미지 크기를 300px로 조정 */
+    height: 200px; /* 이미지 높이도 300px로 조정 */
+    margin: 20px 20px; /* 상하 마진을 20px로 조정하여 이미지들 사이의 간격을 더 넓게 함 */
+    cursor: pointer;
+    display: block; /* 이미지를 블록 요소로 설정 */
+}
+
+/* 공 이미지들에 대한 hover 및 선택 시 색상 변화 처리 */
+.options img[src*="ball"] {
+    filter: grayscale(100%); /* 기본적으로 회색조로 설정 */
+    transition: transform 0.3s ease, filter 0.3s ease; /* 변환과 필터 효과에 대한 전환 효과 적용 */
+}
+
+.options img[src*="ball"]:hover, .options img[src*="ball"].selected {
+    filter: grayscale(0%); /* 마우스 호버 시 또는 선택된 이미지는 회색조 제거 */
+    transform: scale(1.1); /* 마우스 호버 시 크기를 10% 증가 */
+}
