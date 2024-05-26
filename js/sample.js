@@ -199,29 +199,33 @@ class GameContainer {
   hideSettingsScreen() {
     document.getElementById("buttons").style.display = "none";
   }
+  getBrickTypeList(rows, columns) {
+    var brickTypeList = [];
+    // 옷 벽돌 생성
+    var levelcloth = clothImages[gameDisplay.level - 1];
+    for (let i = 0; i < levelcloth.length; i++) {
+      brickTypeList.push(levelcloth[i]);
+      brickTypeList.push(levelcloth[i]);
+      brickTypeList.push(levelcloth[i]);
+    }
+    for (var i = brickTypeList.length; i < columns * rows; i++) {
+      if (Math.random() < 0.1) {
+        brickTypeList.push("addBall");
+      } else {
+        brickTypeList.push("brick");
+      }
+    }
+    // 랜덤 섞기
+    brickTypeList.sort(() => Math.random() - 0.5);
+    return brickTypeList;
 
+  }
   createBricks() {
     // 레벨별 벽돌 생성
     if (gameDisplay.level === 1) {
       var rows = 3;
       var columns = 20;
-      var brickTypeList = [];
-      // 옷 벽돌 생성
-      var levelcloth = clothImages[gameDisplay.level - 1];
-      for (let i = 0; i < levelcloth.length; i++) {
-        brickTypeList.push(levelcloth[i]);
-        brickTypeList.push(levelcloth[i]);
-        brickTypeList.push(levelcloth[i]);
-      }
-      for (var i = brickTypeList.length; i < columns * rows; i++) {
-        if (Math.random() < 0.1) {
-          brickTypeList.push("addBall");
-        } else {
-          brickTypeList.push("brick");
-        }
-      }
-      // 랜덤 섞기
-      brickTypeList.sort(() => Math.random() - 0.5);
+      var brickTypeList = this.getBrickTypeList(rows, columns);
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
@@ -239,8 +243,6 @@ class GameContainer {
       // var x = (this.gameBoard.width - 75) / 2; // 중앙
       // var y = 500;
       // this.bricks.push(new BlockBrick(x, y));
-      // 정중앙에 4개 배치
-      // 정중앙에 6개 배치
       for (let i = 0; i < 6; i++) {
         var x = (this.gameBoard.width - 75) / 2 + (i - 3) * 100; // 중앙에서 150px씩 떨어져서 배치
         var y = 500;
