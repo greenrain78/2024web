@@ -246,10 +246,12 @@ class GameContainer {
       var columns = 20;
       this.createBricksRange(rows, columns);
 
-      // 정중앙에 배치
-      var x = (this.gameBoard.width - 75) / 2; // 중앙
-      var y = 500;
-      this.bricks.push(new BlockBrick(x, y));
+      // 정중앙에 2개 배치
+      for (let i = 0; i < 2; i++) {
+        var x = (this.gameBoard.width - 75) / 2 + i * 100 - 50; // 중앙에서 150px씩 떨어져서 배치
+        var y = 500;
+        this.bricks.push(new BlockBrick(x, y));
+      }
     } else if (gameDisplay.level === 2) {
       var rows = 4;
       var columns = 20;
@@ -327,12 +329,18 @@ class GameContainer {
     if (this.isGameOver()) {
       window.location = "gameover.html";
     } else if (this.isGameClear()) {
-      alert("Game Clear");
+      window.location = "./clear/party" + gameDisplay.level + ".html";
     } else {
       requestAnimationFrame(() => this.loop());
     }
   }
-  isGameClear() {}
+  isGameClear() {
+    // 옷을 모두 모았는지 체크
+    if (gameDisplay.closetList.length === clothImages[gameDisplay.level - 1].length) {
+      return true;
+    }
+    return false;
+  }
   isGameOver() {
     if (gameDisplay.hearts <= 0) {
       return true;
@@ -471,6 +479,7 @@ class Brick {
 class BlockBrick extends Brick {
   constructor(x, y) {
     super(x, y);
+    this.status = 0;
   }
   draw(ctx) {
     var img = gameDisplay.getBlockBrickImg();
