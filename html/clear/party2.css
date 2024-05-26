@@ -11,3 +11,9 @@ body {
   width: 1300px;
   background-image: url(./party2clear.png);
 }
+#next {
+  width: 70px;
+  height: 70px;
+  float: right;
+  margin: 10px 20px 0 0;
+}
