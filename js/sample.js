@@ -1,5 +1,6 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
 brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
+blockBrickImages = ["brick_img_1_x.png", "brick_img_2_x.png", "brick_img_3_x.png"]; // 블록 벽돌 이미지
 itemEffectImages = { addBall: "item.jpg" }; // 아이템 이미지
 clothImages = [
   ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
@@ -30,6 +31,7 @@ class GameDisplay {
     this.backgroundImgIdx = 0; // 배경 이미지 인덱스
     this.brickImgIdx = 0; // 벽돌 이미지 인덱스
     this.brickImg = new Image(); // 벽돌 이미지
+    this.blockBrickImg = new Image(); // 블록 벽돌 이미지
     this.ballImgIdx = 0; // 공 이미지 인덱스
     this.ballImg = new Image(); // 공 이미지
     this.closetList = []; // 옷 이미지
@@ -75,10 +77,16 @@ class GameDisplay {
     this.brickImgIdx = idx;
     this.brickImg = new Image();
     this.brickImg.src = "../assets/bricks/" + brickImages[this.brickImgIdx];
+    this.blockBrickImg = new Image();
+    this.blockBrickImg.src = "../assets/bricks/" + blockBrickImages[this.brickImgIdx];
   }
   getBrickImg() {
     // 벽돌 이미지 가져오기
     return this.brickImg;
+  }
+  getBlockBrickImg() {
+    // 블록 벽돌 이미지 가져오기
+    return this.blockBrickImg;
   }
   updateBallImg(idx) {
     this.ballImgIdx = idx;
@@ -196,7 +204,7 @@ class GameContainer {
     // 레벨별 벽돌 생성
     if (gameDisplay.level === 1) {
       var rows = 3;
-      var columns = 10;
+      var columns = 20;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
@@ -208,9 +216,13 @@ class GameContainer {
           }
         }
       }
+      // 정중앙에 배치
+      var x = (this.gameBoard.width - 75) / 2; // 중앙
+      var y = 500;
+      this.bricks.push(new BlockBrick(x, y));
     }else if (gameDisplay.level === 2) {
       var rows = 4;
-      var columns = 15;
+      var columns = 20;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
@@ -432,6 +444,15 @@ class Brick {
     if (this.status === 1) {
       ctx.drawImage(img, this.x, this.y, this.width, this.height);
     }
+  }
+}
+class BlockBrick extends Brick {
+  constructor(x, y) {
+    super(x, y);
+  }
+  draw(ctx) {
+    var img = gameDisplay.getBlockBrickImg();
+    ctx.drawImage(img, this.x, this.y, this.width, this.height);
   }
 }
 class ItemBrick extends Brick {
