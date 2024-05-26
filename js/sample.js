@@ -1,5 +1,5 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
-brickImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 벽돌 이미지
+brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
 itemEffectImages = { addBall: "item.jpg" }; // 아이템 이미지
 clothImages = [
   ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
@@ -163,7 +163,6 @@ class GameContainer {
     this.loop();
   }
   initListeners() {
-    // 마우스 이벤트
     this.canvas.addEventListener("mousemove", (event) => {
       let relativeX = event.clientX - this.canvas.offsetLeft;
       if (relativeX > 0 && relativeX < this.canvas.width) {
@@ -171,16 +170,26 @@ class GameContainer {
       }
       this.cursor.move(event.clientX, event.clientY);
     });
-    // 키보드 이벤트
+
     document.addEventListener("keydown", (event) => {
       if (event.code === "Space") {
-        // 스페이스바
         this.isPaused = !this.isPaused;
-        if (!this.isPaused) {
-          this.loop(); // 재개할 때 루프를 다시 시작
+        if (this.isPaused) {
+          this.showSettingsScreen();
+        } else {
+          this.hideSettingsScreen();
+          this.loop();
         }
       }
     });
+  }
+
+  showSettingsScreen() {
+    document.getElementById("buttons").style.display = "block";
+  }
+
+  hideSettingsScreen() {
+    document.getElementById("buttons").style.display = "none";
   }
 
   createBricks() {

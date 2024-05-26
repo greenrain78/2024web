@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // 배경 음악 요소 가져오기
     const backgroundMusic = document.getElementById('background_music');
 
+    // 초기 배경 음악 재생
+    backgroundMusic.play();
+
     // 음악 선택 버튼 클릭 이벤트
     musicButton.addEventListener('click', function() {
         hideAllOptions(); // 모든 옵션 숨기기
@@ -26,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 소리제거 버튼 클릭 이벤트
     muteButton.addEventListener('click', function() {
         if (backgroundMusic.paused) {
-            console.log(backgroundMusic)
             backgroundMusic.play();
         } else {
             backgroundMusic.pause();
@@ -39,21 +41,36 @@ document.addEventListener('DOMContentLoaded', function() {
         ballOptions.classList.add('hidden');
     }
 
-    // 배경음악 자동 재생을 위한 로직은 제거됨
-    // 사용자 인터랙션을 통해 배경음악을 제어하세요
+    // localStorage에서 선택된 음악 파일 로드
+    const selectedMusic = localStorage.getItem('selectedMusic');
+    if (selectedMusic) {
+        changeMusic(selectedMusic);
+    }
+
+    // localStorage에서 선택된 공 로드
+    const selectedBall = localStorage.getItem('selectedBall');
+    if (selectedBall) {
+        selectBall(selectedBall);
+    }
 });
 
-// 음악 변경 함수
 function changeMusic(musicFile) {
     const backgroundMusic = document.getElementById('background_music');
     backgroundMusic.src = musicFile;
-    if(backgroundMusic.paused) {
-        backgroundMusic.play();
-    }
+    backgroundMusic.play();
+    // 선택된 음악 파일을 localStorage에 저장
+    localStorage.setItem('selectedMusic', musicFile);
 }
 
-// 공 선택 함수
+// 공 선택 함수 수정
 function selectBall(ballType) {
     console.log(ballType + ' selected');
-    // 여기에 선택된 공을 처리하는 코드를 추가하세요.
+    // 모든 공 이미지들의 'selected' 클래스 제거
+    document.querySelectorAll('#ball_options img').forEach(img => {
+        img.classList.remove('selected');
+    });
+    // 선택된 공 이미지에 'selected' 클래스 추가
+    document.querySelector(`img[src*="${ballType}"]`).classList.add('selected');
+    // 선택된 공을 localStorage에 저장
+    localStorage.setItem('selectedBall', ballType);
 }
