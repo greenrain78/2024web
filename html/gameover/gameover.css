@@ -9,11 +9,11 @@ body {
 .all {
   height: 1000px;
   width: 1300px;
-  background-image: url(../../assets/clear/party1clear.png);
+  background-image: url(./gameover.png);
 }
-#next {
-  width: 70px;
-  height: 70px;
+#restart {
+  width: 355px;
+  height: 126px;
   float: right;
-  margin: 10px 20px 0 0;
+  margin: 300px 50px;
 }

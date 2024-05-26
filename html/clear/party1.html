@@ -4,6 +4,23 @@
     <link rel="stylesheet" href="../../css/clear/party1.css" />
   </head>
   <body>
-    <div class="all"></div>
+    <div class="all">
+      <div>
+        <!-- a 태그에 다음 단계 게임 링크 추가할 것 -->
+        <a href="./party1.html">
+          <img id="next" src="./next.png" />
+        </a>
+      </div>
+    </div>
+    <script>
+      // 넘어가기 hover
+      const next = document.getElementById("next");
+      next.addEventListener("mouseover", function () {
+        this.src = "./next_hover.png";
+      });
+      next.addEventListener("mouseout", function () {
+        this.src = "./next.png";
+      });
+    </script>
   </body>
 </html>
