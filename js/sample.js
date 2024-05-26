@@ -205,14 +205,33 @@ class GameContainer {
     if (gameDisplay.level === 1) {
       var rows = 3;
       var columns = 20;
+      var brickTypeList = [];
+      // 옷 벽돌 생성
+      var levelcloth = clothImages[gameDisplay.level - 1];
+      for (let i = 0; i < levelcloth.length; i++) {
+        brickTypeList.push(levelcloth[i]);
+        brickTypeList.push(levelcloth[i]);
+        brickTypeList.push(levelcloth[i]);
+      }
+      for (var i = brickTypeList.length; i < columns * rows; i++) {
+        if (Math.random() < 0.1) {
+          brickTypeList.push("addBall");
+        } else {
+          brickTypeList.push("brick");
+        }
+      }
+      // 랜덤 섞기
+      brickTypeList.sort(() => Math.random() - 0.5);
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
           var x = c * (75 + 10) + 30;
           var y = r * (75 + 10) + 30;
-          if (Math.random() < 0.1) {
+          if (brickTypeList[r * columns + c] === "addBall") {
             this.bricks.push(new ItemBrick(x, y, "addBall"));
-          } else {
-            this.bricks.push(new ClothBrick(x, y));
+          } else if (brickTypeList[r * columns + c] === "brick") {
+            this.bricks.push(new Brick(x, y));
+          } else if (brickTypeList[r * columns + c].startsWith("clothes")) {
+            this.bricks.push(new ClothBrick(x, y, brickTypeList[r * columns + c]));
           }
         }
       }
@@ -505,11 +524,10 @@ class ItemBrick extends Brick {
 }
 
 class ClothBrick extends Brick {
-  constructor(x, y) {
+  constructor(x, y, cloth) {
     super(x, y);
+    this.cloth = cloth;
     this.img = new Image();
-    var levelcloth = clothImages[gameDisplay.level - 1];
-    this.cloth = levelcloth[Math.floor(Math.random() * levelcloth.length)];
     this.img.src = "../assets/clothes/" + this.cloth;
   }
 
