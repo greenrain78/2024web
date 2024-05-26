@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./story2.css" />
+    <link rel="stylesheet" href="../../css/story/story2.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <div class="all">
       <div>
         <a href="./story3.html">
-          <img id="next" src="./next.png" />
+          <img id="next" src="../../assets/story/next.png" />
         </a>
       </div>
       <div class="closet">
@@ -16,7 +16,7 @@
         <img class="door" id="closet_right" />
       </div>
       <div>
-        <img id="open_closet" src="./open_closet.png" />
+        <img id="open_closet" src="../../assets/story/open_closet.png" />
       </div>
     </div>
     <script>
@@ -28,19 +28,19 @@
       // 넘어가기 hover
       const next = document.getElementById("next");
       next.addEventListener("mouseover", function () {
-        this.src = "./next_hover.png";
+        this.src = "../../assets/story/next_hover.png";
       });
       next.addEventListener("mouseout", function () {
-        this.src = "./next.png";
+        this.src = "../../assets/story/next.png";
       });
 
       // 옷장 열기 hover
       const open = document.getElementById("open_closet");
       open.addEventListener("mouseover", function () {
-        this.src = "./open_closet_hover.png";
+        this.src = "../../assets/story/open_closet_hover.png";
       });
       open.addEventListener("mouseout", function () {
-        this.src = "./open_closet.png";
+        this.src = "../../assets/story/open_closet.png";
       });
     </script>
   </body>

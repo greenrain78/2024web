@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>설정 페이지</title>
+    <link rel="stylesheet" href="../css/setting.css">
+</head>
+<body>
+    <div id="Setting-screen" class="Screen">
+        <div id="Setting-button">
+            <button id="select_music">음악 선택</button>
+            <button id="select_ball">공 선택</button>
+            <button id="mute_sound">소리 on/off</button>
+            <a href="./intro.html">
+                <button id="back">BACK</button>
+            </a>
+        </div>
+
+        <div id="music_options" class="options hidden">
+            <img src="../assets/sound_o.png" onclick="changeMusic('../assets/music/backgroundsound1.mp3')">
+            <img src="../assets/sound_o.png" onclick="changeMusic('../assets/music/backgroundsound2.mp3')">
+            <img src="../assets/sound_o.png" onclick="changeMusic('../assets/music/backgroundsound3.mp3')">
+        </div>
+    
+        <div id="ball_options" class="options hidden">
+            <img src="../assets/ball/ball1.png" onclick="selectBall('ball1')">
+            <img src="../assets/ball/ball2.png" onclick="selectBall('ball2')">
+            <img src="../assets/ball/ball3.png" onclick="selectBall('ball3')">
+        </div>
+    
+        <audio id="background_music" loop>
+            <source src="../assets/music/backgroundsound1.mp3" type="audio/mp3">
+        </audio>
+    </div>
+    
+    <script src="../js/setting.js"></script>
+</body>
+</html>

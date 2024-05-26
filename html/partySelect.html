@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../css/partySelect.css" />
+  </head>
+  <body>
+    <div>
+      <img id="partyselect_logo" src="../assets/partySelect/partyselect_logo.png" />
+    </div>
+    <div>
+      <img class="partyPic" src="../assets/partySelect/pajama.png" />
+      <img class="partyPic" src="../assets/partySelect/pool.png" />
+      <img class="partyPic" src="../assets/partySelect/danceparty.png" />
+    </div>
+    <div>
+      <img class="selection" src="../assets/partySelect/selection.png" />
+      <img class="selection" src="../assets/partySelect/selection.png" />
+      <img class="selection" src="../assets/partySelect/selection.png" />
+    </div>
+    <script>
+      const myImages = document.getElementsByClassName("selection");
+
+      const imagesArray = Array.from(myImages);
+
+      // 마우스 오버 이벤트 리스너 추가
+      imagesArray.forEach((element) => {
+        element.addEventListener("mouseover", function () {
+          this.src = "../assets/partySelect/selection_hover.png";
+        });
+
+        // 마우스 아웃 이벤트 리스너 추가
+        element.addEventListener("mouseout", function () {
+          this.src = "../assets/partySelect/selection.png";
+        });
+      });
+    </script>
+  </body>
+</html>

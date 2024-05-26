@@ -28,6 +28,6 @@ body {
   height: 110px;
 }
 .first {
-  background-image: url(./back2.png);
+  background-image: url(../assets/intro/back2.png);
   height: 1000px;
 }

@@ -9,7 +9,7 @@ body {
 .all {
   height: 1000px;
   width: 1300px;
-  background-image: url(./party2clear.png);
+  background-image: url(../../assets/clear/party2clear.png);
 }
 #next {
   width: 70px;

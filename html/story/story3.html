@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./story3.css" />
+    <link rel="stylesheet" href="../../css/story/story3.css" />
   </head>
   <body>
     <div class="all">
       <div>
         <!-- 게임 진행 화면 html 링크로 수정해야 함. -->
-        <a href="./story3.html">
-          <img id="start_game" src="./start_game.png" />
+        <a href="../partySelect.html">
+          <img id="start_game" src="../../assets/story/start_game.png" />
         </a>
       </div>
       <div>
-        <img class="message" src="./message3.png" />
+        <img class="message" src="../../assets/story/message3.png" />
       </div>
       <div>
-        <img id="warningPic" src="./warning1.png" />
+        <img id="warningPic" src="../../assets/story/warning1.png" />
       </div>
       <div>
-        <img id="open_warning" src="./open_warning.png" />
+        <img id="open_warning" src="../../assets/story/open_warning.png" />
       </div>
     </div>
 
@@ -27,27 +27,27 @@
 
       // 편지 hover
       open.addEventListener("mouseover", function () {
-        this.src = "./open_warning_hover.png";
+        this.src = "../../assets/story/open_warning_hover.png";
       });
       open.addEventListener("mouseout", function () {
-        this.src = "./open_warning.png";
+        this.src = "../../assets/story/open_warning.png";
       });
 
       // game start hover
       const start = document.getElementById("start_game");
       start.addEventListener("mouseover", function () {
-        this.src = "./start_game_hover.png";
+        this.src = "../../assets/story/start_game_hover.png";
       });
       start.addEventListener("mouseout", function () {
-        this.src = "./start_game.png";
+        this.src = "../../assets/story/start_game.png";
       });
 
       // 클릭 이벤트 리스너 추가
       const letter = document.getElementById("warningPic");
       open.addEventListener("click", function () {
-        letter.src = "./warning2.png"; // 첫 번째 이미지로 변경
+        letter.src = "../../assets/story/warning2.png"; // 첫 번째 이미지로 변경
         setTimeout(() => {
-          letter.src = "./warning3.png"; // 일정 시간 후 두 번째 이미지로 변경
+          letter.src = "../../assets/story/warning3.png"; // 일정 시간 후 두 번째 이미지로 변경
         }, 1000); // 1초 (1000밀리초) 후에 변경
         setTimeout(() => {
           start.style.display = "block";
