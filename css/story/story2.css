@@ -9,20 +9,20 @@ body {
 .all {
   height: 1000px;
   width: 1300px;
-  background-image: url(./story2_back.png);
+  background-image: url(../../assets/story/story2_back.png);
   position: fixed;
 }
 #closet_left {
   left: 0;
   transform-origin: left;
-  background: url("./door_left.png") no-repeat;
+  background: url("../../assets/story/door_left.png") no-repeat;
   background-size: cover;
   transition: transform 3s ease;
 }
 #closet_right {
   right: 0;
   transform-origin: right;
-  background: url("./door_right.png") no-repeat;
+  background: url("../../assets/story/door_right.png") no-repeat;
   background-size: cover;
   transition: transform 3s ease;
 }

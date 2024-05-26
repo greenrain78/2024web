@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./story1.css" />
+    <link rel="stylesheet" href="../../css/story/story1.css" />
   </head>
   <body>
     <div class="all">
       <div>
         <a href="./story2.html">
-          <img id="next" src="./next.png" />
+          <img id="next" src="../../assets/story/next.png" />
         </a>
       </div>
       <div>
-        <img class="message" src="./message1.png" />
+        <img class="message" src="../../assets/story/message1.png" />
       </div>
       <div>
-        <img id="invitePic" src="./invite1.png" />
+        <img id="invitePic" src="../../assets/story/invite1.png" />
       </div>
       <div>
         <!-- 편지 열리는 애니메이션 추가해야 함 -->
-        <img id="open_invite" src="./open_invite.png" />
+        <img id="open_invite" src="../../assets/story/open_invite.png" />
       </div>
     </div>
     <script>
@@ -26,27 +26,27 @@
 
       // 편지 열기 hover
       open.addEventListener("mouseover", function () {
-        this.src = "./open_hover.png";
+        this.src = "../../assets/story/open_hover.png";
       });
       open.addEventListener("mouseout", function () {
-        this.src = "./open_invite.png";
+        this.src = "../../assets/story/open_invite.png";
       });
 
       // 넘어가기 hover
       const next = document.getElementById("next");
       next.addEventListener("mouseover", function () {
-        this.src = "./next_hover.png";
+        this.src = "../../assets/story/next_hover.png";
       });
       next.addEventListener("mouseout", function () {
-        this.src = "./next.png";
+        this.src = "../../assets/story/next.png";
       });
 
       // 클릭 이벤트 리스너 추가
       const letter = document.getElementById("invitePic");
       open.addEventListener("click", function () {
-        letter.src = "./invite2.png"; // 첫 번째 이미지로 변경
+        letter.src = "../../assets/story/invite2.png"; // 첫 번째 이미지로 변경
         setTimeout(() => {
-          letter.src = "./invite3.png"; // 일정 시간 후 두 번째 이미지로 변경
+          letter.src = "../../assets/story/invite3.png"; // 일정 시간 후 두 번째 이미지로 변경
         }, 1000); // 1초 (1000밀리초) 후에 변경
       });
     </script>
