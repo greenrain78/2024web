@@ -343,12 +343,24 @@ class GameContainer {
     this.collisionManager.checkCollisions();
 
     // 게임 오버 체크 및 재귀 호출
-    if (gameDisplay.hearts > 0) {
-      requestAnimationFrame(() => this.loop());
-    } else {
+    if(this.isGameOver()){
       alert("Game Over");
+    }else if(this.isGameClear()){
+      alert("Game Clear");
+    } else {
+      requestAnimationFrame(() => this.loop());
     }
   }
+  isGameClear() {
+
+  }
+  isGameOver() {
+    if (gameDisplay.hearts <= 0) {
+      return true;
+    }
+    return false;
+  }
+
   // 공 개수 추가 아이템
   addBall() {
     var paddlex = this.paddle.x + this.paddle.width / 2;
@@ -361,7 +373,7 @@ class Cursor {
   constructor() {
     this.x = 0;
     this.y = 0;
-    this.radius = 50;
+    this.radius = 100;
   }
   move(x, y) {
     this.x = x;
@@ -421,35 +433,25 @@ class Ball {
     this.dy = -this.dy;
   }
   limitSpeed() {
-    console.log(this.dx, this.dy);
     if (this.dx > this.maxSpeed) {
-      console.log("dx > maxSpeed")
       this.dx = this.maxSpeed;
     } else if (this.dx < -this.maxSpeed && this.dx < 0) {
-      console.log("dx < -maxSpeed")
       this.dx = -this.maxSpeed;
     } else if (this.dx < this.minSpeed && this.dx > 0) {
-      console.log("dx < minSpeed")
       this.dx = this.minSpeed;
     } else if (this.dx > -this.minSpeed && this.dx < 0) {
-      console.log("dx > -minSpeed")
       this.dx = -this.minSpeed;
     }
 
     if (this.dy > this.maxSpeed) {
-      console.log("dy > maxSpeed")
       this.dy = this.maxSpeed;
     } else if (this.dy < -this.maxSpeed && this.dy < 0) {
-      console.log("dy < -maxSpeed")
       this.dy = -this.maxSpeed;
     } else if (this.dy < this.minSpeed && this.dy > 0) {
-      console.log("dy < minSpeed")
       this.dy = this.minSpeed;
     } else if (this.dy > -this.minSpeed && this.dy < 0) {
-      console.log("dy > -minSpeed")
       this.dy = -this.minSpeed;
     }
-    console.log(this.dx, this.dy);
   } 
 }
 

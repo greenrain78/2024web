@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="./gameover.css" />
+    <link rel="stylesheet" href="../css/gameover.css" />
   </head>
   <body>
     <div class="all">
       <div>
         <!-- a 태그 링크 수정해야 함. -->
-        <a href="./gameover.html">
-          <img id="restart" src="./restart.png" />
+        <a href="./intro.html">
+          <img id="restart" src="../assets/gameover/restart.png" />
         </a>
       </div>
     </div>
@@ -16,10 +16,10 @@
       // restart hover
       const restart = document.getElementById("restart");
       restart.addEventListener("mouseover", function () {
-        this.src = "./restart_hover.png";
+        this.src = "../assets/gameover/restart_hover.png";
       });
       restart.addEventListener("mouseout", function () {
-        this.src = "./restart.png";
+        this.src = "../assets/gameover/restart.png";
       });
     </script>
   </body>
