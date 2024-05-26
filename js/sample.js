@@ -1,6 +1,10 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
 brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
-blockBrickImages = ["brick_img_1_x.png", "brick_img_2_x.png", "brick_img_3_x.png"]; // 블록 벽돌 이미지
+blockBrickImages = [
+  "brick_img_1_x.png",
+  "brick_img_2_x.png",
+  "brick_img_3_x.png",
+]; // 블록 벽돌 이미지
 itemEffectImages = { addBall: "plus_item.png" }; // 아이템 이미지
 clothImages = [
   ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
@@ -78,7 +82,8 @@ class GameDisplay {
     this.brickImg = new Image();
     this.brickImg.src = "../assets/bricks/" + brickImages[this.brickImgIdx];
     this.blockBrickImg = new Image();
-    this.blockBrickImg.src = "../assets/bricks/" + blockBrickImages[this.brickImgIdx];
+    this.blockBrickImg.src =
+      "../assets/bricks/" + blockBrickImages[this.brickImgIdx];
   }
   getBrickImg() {
     // 벽돌 이미지 가져오기
@@ -199,7 +204,7 @@ class GameContainer {
   hideSettingsScreen() {
     document.getElementById("buttons").style.display = "none";
   }
-  getBrickTypeList(rows, columns) {
+  createBricksRange(rows, columns) {
     var brickTypeList = [];
     // 옷 벽돌 생성
     var levelcloth = clothImages[gameDisplay.level - 1];
@@ -217,72 +222,48 @@ class GameContainer {
     }
     // 랜덤 섞기
     brickTypeList.sort(() => Math.random() - 0.5);
-    return brickTypeList;
 
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns; c++) {
+        var x = c * (75 + 10) + 30;
+        var y = r * (75 + 10) + 30;
+        if (brickTypeList[r * columns + c] === "addBall") {
+          this.bricks.push(new ItemBrick(x, y, "addBall"));
+        } else if (brickTypeList[r * columns + c] === "brick") {
+          this.bricks.push(new Brick(x, y));
+        } else if (brickTypeList[r * columns + c].startsWith("clothes")) {
+          this.bricks.push(
+            new ClothBrick(x, y, brickTypeList[r * columns + c])
+          );
+        }
+      }
+    }
   }
   createBricks() {
     // 레벨별 벽돌 생성
     if (gameDisplay.level === 1) {
       var rows = 3;
       var columns = 20;
-      var brickTypeList = this.getBrickTypeList(rows, columns);
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < columns; c++) {
-          var x = c * (75 + 10) + 30;
-          var y = r * (75 + 10) + 30;
-          if (brickTypeList[r * columns + c] === "addBall") {
-            this.bricks.push(new ItemBrick(x, y, "addBall"));
-          } else if (brickTypeList[r * columns + c] === "brick") {
-            this.bricks.push(new Brick(x, y));
-          } else if (brickTypeList[r * columns + c].startsWith("clothes")) {
-            this.bricks.push(new ClothBrick(x, y, brickTypeList[r * columns + c]));
-          }
-        }
-      }
+      this.createBricksRange(rows, columns);
+
       // 정중앙에 배치
-      // var x = (this.gameBoard.width - 75) / 2; // 중앙
-      // var y = 500;
-      // this.bricks.push(new BlockBrick(x, y));
-      for (let i = 0; i < 6; i++) {
-        var x = (this.gameBoard.width - 75) / 2 + (i - 3) * 100; // 중앙에서 150px씩 떨어져서 배치
-        var y = 500;
-        this.bricks.push(new BlockBrick(x, y));
-      }
-    }else if (gameDisplay.level === 2) {
+      var x = (this.gameBoard.width - 75) / 2; // 중앙
+      var y = 500;
+      this.bricks.push(new BlockBrick(x, y));
+    } else if (gameDisplay.level === 2) {
       var rows = 4;
       var columns = 20;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < columns; c++) {
-          var x = c * (75 + 10) + 30;
-          var y = r * (75 + 10) + 30;
-          if (Math.random() < 0.1) {
-            this.bricks.push(new ItemBrick(x, y, "addBall"));
-          } else {
-            this.bricks.push(new ClothBrick(x, y));
-          }
-        }
-      }
+      this.createBricksRange(rows, columns);
       // 정중앙에 4개 배치
       for (let i = 0; i < 4; i++) {
         var x = (this.gameBoard.width - 75) / 2 + i * 100 - 150; // 중앙에서 150px씩 떨어져서 배치
         var y = 500;
         this.bricks.push(new BlockBrick(x, y));
       }
-
     } else if (gameDisplay.level === 3) {
       var rows = 5;
       var columns = 20;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < columns; c++) {
-          var x = c * (75 + 10) + 30;
-          var y = r * (75 + 10) + 30;
-          if (Math.random() < 0.1) {
-            this.bricks.push(new ItemBrick(x, y, "addBall"));
-          } else {
-            this.bricks.push(new ClothBrick(x, y));
-          }
-        }
-      }
+      this.createBricksRange(rows, columns);
       // 정중앙에 6개 배치
       for (let i = 0; i < 6; i++) {
         var x = (this.gameBoard.width - 75) / 2 + i * 100 - 250; // 중앙에서 150px씩 떨어져서 배치
@@ -343,17 +324,15 @@ class GameContainer {
     this.collisionManager.checkCollisions();
 
     // 게임 오버 체크 및 재귀 호출
-    if(this.isGameOver()){
+    if (this.isGameOver()) {
       window.location = "gameover.html";
-    }else if(this.isGameClear()){
+    } else if (this.isGameClear()) {
       alert("Game Clear");
     } else {
       requestAnimationFrame(() => this.loop());
     }
   }
-  isGameClear() {
-
-  }
+  isGameClear() {}
   isGameOver() {
     if (gameDisplay.hearts <= 0) {
       return true;
@@ -452,7 +431,7 @@ class Ball {
     } else if (this.dy > -this.minSpeed && this.dy < 0) {
       this.dy = -this.minSpeed;
     }
-  } 
+  }
 }
 
 class Paddle {
@@ -734,9 +713,9 @@ $(document).ready(function () {
   // 레벨이 없으면 1로 설정
   if (level === null) {
     level = 1;
-    alert("레벨이 없어서 1로 설정합니다.")
+    alert("레벨이 없어서 1로 설정합니다.");
   }
   gameDisplay.updateLevel(level);
   var game = new GameContainer("gameCanvas");
-  game.run();  
+  game.run();
 });
