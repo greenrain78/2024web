@@ -217,9 +217,16 @@ class GameContainer {
         }
       }
       // 정중앙에 배치
-      var x = (this.gameBoard.width - 75) / 2; // 중앙
-      var y = 500;
-      this.bricks.push(new BlockBrick(x, y));
+      // var x = (this.gameBoard.width - 75) / 2; // 중앙
+      // var y = 500;
+      // this.bricks.push(new BlockBrick(x, y));
+      // 정중앙에 4개 배치
+      // 정중앙에 6개 배치
+      for (let i = 0; i < 6; i++) {
+        var x = (this.gameBoard.width - 75) / 2 + (i - 3) * 100; // 중앙에서 150px씩 떨어져서 배치
+        var y = 500;
+        this.bricks.push(new BlockBrick(x, y));
+      }
     }else if (gameDisplay.level === 2) {
       var rows = 4;
       var columns = 20;
@@ -234,6 +241,13 @@ class GameContainer {
           }
         }
       }
+      // 정중앙에 4개 배치
+      for (let i = 0; i < 4; i++) {
+        var x = (this.gameBoard.width - 75) / 2 + i * 100 - 150; // 중앙에서 150px씩 떨어져서 배치
+        var y = 500;
+        this.bricks.push(new BlockBrick(x, y));
+      }
+
     } else if (gameDisplay.level === 3) {
       var rows = 5;
       var columns = 20;
@@ -247,6 +261,12 @@ class GameContainer {
             this.bricks.push(new ClothBrick(x, y));
           }
         }
+      }
+      // 정중앙에 6개 배치
+      for (let i = 0; i < 6; i++) {
+        var x = (this.gameBoard.width - 75) / 2 + i * 100 - 250; // 중앙에서 150px씩 떨어져서 배치
+        var y = 500;
+        this.bricks.push(new BlockBrick(x, y));
       }
     }
   }
