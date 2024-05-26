@@ -116,7 +116,7 @@ class GameDisplay {
     this.closetListNode.html("");
     this.closetList.forEach((cloth) => {
       var img = new Image();
-      img.src = "../assets/" + cloth;
+      img.src = "../assets/clothes/" + cloth;
       img.classList.add("clothes");
       this.closetListNode.append(img);
     });
@@ -469,7 +469,7 @@ class ClothBrick extends Brick {
     this.img = new Image();
     var levelcloth = clothImages[gameDisplay.level - 1];
     this.cloth = levelcloth[Math.floor(Math.random() * levelcloth.length)];
-    this.img.src = "../assets/" + this.cloth;
+    this.img.src = "../assets/clothes/" + this.cloth;
   }
 
   draw(ctx) {
