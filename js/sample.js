@@ -344,7 +344,7 @@ class GameContainer {
 
     // 게임 오버 체크 및 재귀 호출
     if(this.isGameOver()){
-      alert("Game Over");
+      window.location = "gameover.html";
     }else if(this.isGameClear()){
       alert("Game Clear");
     } else {
@@ -728,29 +728,15 @@ class CollisionManager {
 
 $(document).ready(function () {
   // 게임 시작
-  var game;
-  $("#levelBtn1").click(() => {
-    gameDisplay.updateLevel(1);
-    game.isPaused = true; 
-    game = new GameContainer("gameCanvas");
-    game.run();
-  });
-  $("#levelBtn2").click(() => {
-    gameDisplay.updateLevel(2);
-    game.isPaused = true; 
-    game = new GameContainer("gameCanvas");
-    game.run();
-  });
-  $("#levelBtn3").click(() => {
-    gameDisplay.updateLevel(3);
-    game.isPaused = true; 
-    game = new GameContainer("gameCanvas");
-    game.run();
-  });
-  
-  gameDisplay.updateLevel(1);
-  game = new GameContainer("gameCanvas");
-  game.run();
-  
-  
+  // url parameter로 레벨 받아오기
+  var url = new URL(window.location.href);
+  var level = parseInt(url.searchParams.get("level"));
+  // 레벨이 없으면 1로 설정
+  if (level === null) {
+    level = 1;
+    alert("레벨이 없어서 1로 설정합니다.")
+  }
+  gameDisplay.updateLevel(level);
+  var game = new GameContainer("gameCanvas");
+  game.run();  
 });
