@@ -1,7 +1,7 @@
 backgroundImages = ["img_1.jpg", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
 brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
 blockBrickImages = ["brick_img_1_x.png", "brick_img_2_x.png", "brick_img_3_x.png"]; // 블록 벽돌 이미지
-itemEffectImages = { addBall: "item.jpg" }; // 아이템 이미지
+itemEffectImages = { addBall: "plus_item.png" }; // 아이템 이미지
 clothImages = [
   ["clothes1-1.png", "clothes1-2.png", "clothes1-3.png", "clothes1-4.png"],
   [
