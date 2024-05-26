@@ -5,22 +5,42 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
-    <!-- 옷장 움직이는 애니메이션 -->
-    <!-- 배경 이미지로 만들어서 넣어버리기 -->
     <div class="all">
       <div>
-        <img class="message" src="./message2.png" />
+        <a href="./story3.html">
+          <img id="next" src="./next.png" />
+        </a>
       </div>
       <div class="closet">
         <img class="door" id="closet_left" />
         <img class="door" id="closet_right" />
       </div>
-      <button id="btn">옷장 열기</button>
+      <div>
+        <img id="open_closet" src="./open_closet.png" />
+      </div>
     </div>
     <script>
-      $("#btn").click(function () {
+      $("#open_closet").click(function () {
         $("#closet_left").css({ transform: "rotateY(-180deg)" });
         $("#closet_right").css({ transform: "rotateY(180deg)" });
+      });
+
+      // 넘어가기 hover
+      const next = document.getElementById("next");
+      next.addEventListener("mouseover", function () {
+        this.src = "./next_hover.png";
+      });
+      next.addEventListener("mouseout", function () {
+        this.src = "./next.png";
+      });
+
+      // 옷장 열기 hover
+      const open = document.getElementById("open_closet");
+      open.addEventListener("mouseover", function () {
+        this.src = "./open_closet_hover.png";
+      });
+      open.addEventListener("mouseout", function () {
+        this.src = "./open_closet.png";
       });
     </script>
   </body>

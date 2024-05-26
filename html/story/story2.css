@@ -9,42 +9,39 @@ body {
 .all {
   height: 1000px;
   width: 1300px;
-  background-color: #ffdada;
+  background-image: url(./story2_back.png);
   position: fixed;
-}
-.closet {
-  margin: 20px 400px 0 500px;
-  position: relative;
-  width: 300px;
-  height: 500px;
-  background-size: cover;
-  background: url("./closet_body.png") no-repeat center center;
 }
 #closet_left {
   left: 0;
   transform-origin: left;
+  background: url("./door_left.png") no-repeat;
   background-size: cover;
+  transition: transform 3s ease;
 }
 #closet_right {
   right: 0;
   transform-origin: right;
+  background: url("./door_right.png") no-repeat;
   background-size: cover;
+  transition: transform 3s ease;
 }
 .door {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: url("./closet_left.png") no-repeat;
-  transition: transform 3s ease; /* 변화가 일어날 때 부드럽게 이루어지도록 설정 */
-  background-size: cover;
+  width: 165px;
+  height: 360px;
+  margin: 0;
 }
-.message {
-  width: 450px;
-  margin: 80px 450px 50px 450px;
+.closet {
+  margin: 345px 350px 50px 490px;
 }
-#btn {
+#open_closet {
   margin: 50px 500px 50px 600px;
-  width: 100px;
-  height: 40px;
+  width: 130px;
+  height: 50px;
+}
+#next {
+  width: 70px;
+  height: 70px;
+  float: right;
+  margin: 10px 20px 0 0;
 }
