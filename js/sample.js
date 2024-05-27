@@ -77,6 +77,14 @@ class GameDisplay {
     $("#backgroundMusicBtn3").click(() => {
       this.updateMusic(3);
     });
+    $("#musicOn").click(() => {
+      // 배경 음악 재생 중이면 일시정지
+      if (this.musicNode[0].paused) {
+        this.musicNode[0].play();
+      } else {
+        this.musicNode[0].pause();
+      } 
+    });
   }
   updateMusic(idx) {
     console.log("음악 변경");
