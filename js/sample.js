@@ -759,6 +759,4 @@ $(document).ready(function () {
     var game = new GameContainer("gameCanvas");
     game.run();
   });
-
-  
 });
