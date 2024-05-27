@@ -45,6 +45,8 @@ class GameDisplay {
     this.heartsNode = $("#hearts");
     this.levelNode = $("#level");
     this.closetListNode = $("#clothesList");
+    // 배경 음악
+    this.musicNode = $("#background_music");
     this.initListeners();
   }
   initListeners() {
@@ -66,6 +68,20 @@ class GameDisplay {
     $("#ballBtn3").click(() => {
       this.updateBallImg(2);
     });
+    $("#backgroundMusicBtn1").click(() => {
+      this.updateMusic(1);
+    });
+    $("#backgroundMusicBtn2").click(() => {
+      this.updateMusic(2);
+    });
+    $("#backgroundMusicBtn3").click(() => {
+      this.updateMusic(3);
+    });
+  }
+  updateMusic(idx) {
+    console.log("음악 변경");
+    this.musicNode.attr("src", "../assets/music/backgroundsound" + idx + ".mp3");
+    this.musicNode[0].play();
   }
   updateBackgroundImg(idx) {
     this.backgroundImgIdx = idx;
