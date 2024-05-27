@@ -14,7 +14,6 @@ clothImages = [
     "clothes2-3.png",
     "clothes2-4.png",
     "clothes2-5.png",
-    "clothes2-6.png",
   ],
   [
     "clothes3-1.png",
