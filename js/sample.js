@@ -90,7 +90,9 @@ class GameDisplay {
   }
   updateMusic(idx) {
     console.log("음악 변경");
-    this.musicNode.attr("src", "../assets/music/backgroundsound" + idx + ".mp3");
+    var musicFile = "../assets/music/backgroundsound" + idx + ".mp3";
+    localStorage.setItem('selectedMusic', musicFile);
+    this.musicNode.attr("src", musicFile);
     this.musicNode[0].play();
   }
   updateBackgroundImg(idx) {
