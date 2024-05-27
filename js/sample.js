@@ -429,6 +429,7 @@ class Ball {
     this.maxSpeed = 15;
     this.minSpeed = 5;
     this.radius = 50;
+    this.halfRadius = this.radius / 2;
   }
 
   draw(ctx) {
@@ -715,10 +716,10 @@ class CollisionManager {
     this.bricks.forEach((brick) => {
       if (brick instanceof BlockBrick || brick.status === 1) {
         if (this.isRectCollision(ball, brick)) {
-          var collideFromLeft = (ball.x - ball.dx < brick.x);
-          var collideFromRight = (ball.x - ball.dx > brick.x + brick.weight);
-          var collideFromTop = (ball.y - ball.dy < brick.y);
-          var collideFromBottom = (ball.y - ball.dy > brick.y + brick.height);
+          var collideFromLeft = (ball.x - ball.dx - ball.halfRadius < brick.x);
+          var collideFromRight = (ball.x - ball.dx + ball.halfRadius > brick.x + brick.weight);
+          var collideFromTop = (ball.y - ball.dy - ball.halfRadius < brick.y);
+          var collideFromBottom = (ball.y - ball.dy + ball.halfRadius > brick.y + brick.height);
           if (collideFromLeft || collideFromRight) {
             ball.bounceX();
           }
