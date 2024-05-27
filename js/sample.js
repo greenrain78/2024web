@@ -1,4 +1,4 @@
-backgroundImages = ["img_1.png", "img_2.jpg", "img_3.jpg"]; // 배경 이미지
+backgroundImages = ["img_1.png", "img_2.png", "img_3.png"]; // 배경 이미지
 brickImages = ["brick_img_1.png", "brick_img_2.png", "brick_img_3.png"]; // 벽돌 이미지
 blockBrickImages = [
   "brick_img_1_x.png",
