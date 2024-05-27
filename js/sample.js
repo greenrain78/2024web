@@ -80,8 +80,10 @@ class GameDisplay {
     $("#musicOn").click(() => {
       // 배경 음악 재생 중이면 일시정지
       if (this.musicNode[0].paused) {
+        localStorage.setItem('musicMute', 'false');
         this.musicNode[0].play();
       } else {
+        localStorage.setItem('musicMute', 'true');
         this.musicNode[0].pause();
       } 
     });
@@ -742,7 +744,16 @@ $(document).ready(function () {
   const backgroundMusic = document.getElementById('background_music');
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
-    backgroundMusic.play();
+      // 음악 파일이 선택되어 있으면 로드
+      if (localStorage.getItem('selectedMusic')) {
+        backgroundMusic.src = localStorage.getItem('selectedMusic');
+    }
+    // 배경 음악 재생
+    if (localStorage.getItem('musicMute') === 'true') {
+        backgroundMusic.pause();
+    } else {
+        backgroundMusic.play();
+    }       
   }).catch(e => {
       console.error(`Audio permissions denied: ${e}`);
   }).finally(() => {
