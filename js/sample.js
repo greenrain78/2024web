@@ -242,7 +242,8 @@ class GameContainer {
       brickTypeList.push(levelcloth[i]);
     }
     for (var i = brickTypeList.length; i < columns * rows; i++) {
-      if (Math.random() < 0.1) {
+      // 레벨 1 == 0.3, 레벨 2 == 0.2, 레벨 3 == 0.1 확률로 아이템 생성
+      if (Math.random() < 0.3 - (gameDisplay.level - 1) * 0.1) {
         brickTypeList.push("addBall");
       } else {
         brickTypeList.push("brick");
