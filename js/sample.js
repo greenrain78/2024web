@@ -740,10 +740,10 @@ class CollisionManager {
   }
   isRectCollision(ball, obj) {
     if (
-      ball.x > obj.x &&
-      ball.x < obj.x + obj.width &&
-      ball.y > obj.y &&
-      ball.y < obj.y + obj.height
+      ball.x + ball.halfRadius > obj.x &&
+      ball.x - ball.halfRadius  < obj.x + obj.width &&
+      ball.y + ball.halfRadius  > obj.y &&
+      ball.y - ball.halfRadius  < obj.y + obj.height
     ) {
       return true;
     } else {
