@@ -1,22 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 body {
-  background-color: #bc7fcd;
+  width: 1300px;
+  margin: 0 auto;
 }
-#partyselect_logo {
-  width: 400px;
-  height: 350px;
-}
-
-.partyPic {
-  width: 360px;
-  height: 370px;
-  margin: 0 30px;
-}
-.partyPic:hover {
-  width: 400px;
-  height: 420px;
+.all {
+  height: 1000px;
+  width: 1300px;
+  background-image: url(../assets/partySelect/partySelectBack.png);
 }
 .selection {
   width: 100px;
-  height: 50px;
-  margin: 0 150px 0 150px;
+  float: left;
+  margin-top: 700px;
+}
+#selection1 {
+  margin-right: 340px;
+  margin-left: 160px;
+}
+#selection2 {
+  margin-right: 340px;
 }
