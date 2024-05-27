@@ -713,9 +713,18 @@ class CollisionManager {
   checkBrickCollisions(ball) {
     // 벽돌과 충돌 체크
     this.bricks.forEach((brick) => {
-      if (brick.status === 1) {
+      if (brick instanceof BlockBrick || brick.status === 1) {
         if (this.isRectCollision(ball, brick)) {
-          ball.bounceY();
+          var collideFromLeft = (ball.x - ball.dx < brick.x);
+          var collideFromRight = (ball.x - ball.dx > brick.x + brick.weight);
+          var collideFromTop = (ball.y - ball.dy < brick.y);
+          var collideFromBottom = (ball.y - ball.dy > brick.y + brick.height);
+          if (collideFromLeft || collideFromRight) {
+            ball.bounceX();
+          }
+          if (collideFromTop || collideFromBottom) {
+            ball.bounceY();
+          }
           brick.status = 0;
           gameDisplay.updateScore(10);
           if (brick instanceof ItemBrick) {
