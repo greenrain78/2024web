@@ -30,14 +30,17 @@
       const imagesArray = Array.from(myImages);
 
       // 마우스 오버 이벤트 리스너 추가
+      var i = 1;
       imagesArray.forEach((element) => {
         element.addEventListener("mouseover", function () {
           this.src = "../assets/partySelect/selection_hover.png";
         });
-
         // 마우스 아웃 이벤트 리스너 추가
         element.addEventListener("mouseout", function () {
           this.src = "../assets/partySelect/selection.png";
+        });
+        element.addEventListener("click", function () {
+          window.location.href = `./sample.html?level=${i}`;
         });
       });
     </script>
