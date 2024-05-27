@@ -715,16 +715,26 @@ class CollisionManager {
 }
 
 $(document).ready(function () {
-  // 게임 시작
-  // url parameter로 레벨 받아오기
-  var url = new URL(window.location.href);
-  var level = url.searchParams.get("level");
-  // 레벨이 없으면 1로 설정
-  if (level === null) {
-    level = 1;
-    alert("레벨이 없어서 1로 설정합니다.");
-  }
-  gameDisplay.updateLevel(parseInt(level));
-  var game = new GameContainer("gameCanvas");
-  game.run();
+  const backgroundMusic = document.getElementById('background_music');
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
+    backgroundMusic.play();
+  }).catch(e => {
+      console.error(`Audio permissions denied: ${e}`);
+  }).finally(() => {
+    // 게임 시작
+    // url parameter로 레벨 받아오기
+    var url = new URL(window.location.href);
+    var level = url.searchParams.get("level");
+    // 레벨이 없으면 1로 설정
+    if (level === null) {
+      level = 1;
+      alert("레벨이 없어서 1로 설정합니다.");
+    }
+    gameDisplay.updateLevel(parseInt(level));
+    var game = new GameContainer("gameCanvas");
+    game.run();
+  });
+
+  
 });
