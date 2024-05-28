@@ -756,18 +756,11 @@ $(document).ready(function () {
   const backgroundMusic = document.getElementById('background_music');
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
-      // 음악 파일이 선택되어 있으면 로드
-      if (localStorage.getItem('selectedMusic')) {
-        backgroundMusic.src = localStorage.getItem('selectedMusic');
-    }
-    // 배경 음악 재생
-    if (localStorage.getItem('musicMute') === 'true') {
-        backgroundMusic.pause();
-    } else {
-        backgroundMusic.play();
-    }       
+    // 음악 파일이 선택되어 있으면 로드
+    playBackgroundMusic();
   }).catch(e => {
       console.error(`Audio permissions denied: ${e}`);
+      playBackgroundMusic();
   }).finally(() => {
     // 게임 시작
     // url parameter로 레벨 받아오기
@@ -783,3 +776,16 @@ $(document).ready(function () {
     game.run();
   });
 });
+function playBackgroundMusic() {
+  const backgroundMusic = document.getElementById('background_music');
+  if (localStorage.getItem('selectedMusic')) {
+      backgroundMusic.src = localStorage.getItem('selectedMusic');
+  }
+  // 배경 음악 재생
+  if (localStorage.getItem('musicMute') === 'true') {
+      backgroundMusic.pause();
+  } else {
+      backgroundMusic.play();
+  }       
+}
+
